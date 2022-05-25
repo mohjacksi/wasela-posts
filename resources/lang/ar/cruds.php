@@ -109,6 +109,7 @@ return [
             'deleted_at_helper'  => ' ',
             'name'               => 'الإسم',
             'name_helper'        => ' ',
+            'balance'            => 'الرصيد',
         ],
     ],
     'crmNote' => [
@@ -272,6 +273,7 @@ return [
             'deleted_at'        => 'Deleted at',
             'deleted_at_helper' => ' ',
         ],
+        'download' => 'تحميل الفاتورة',
     ],
     'representative' => [
         'title'          => 'المندوبين',

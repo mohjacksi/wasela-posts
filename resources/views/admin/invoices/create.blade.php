@@ -11,7 +11,7 @@
             @csrf
             <div class="form-group">
                 <label class="required" for="customer_id">{{ trans('cruds.invoice.fields.customer') }}</label>
-                <select class="form-control select2 {{ $errors->has('customer') ? 'is-invalid' : '' }}" name="customer_id" id="customer_id" required>
+                <select class="form-control select2 {{ $errors->has('customer') ? 'is-invalid' : '' }}" name="customer_id" id="customer_id" required onchange="getBalance()">
                     @foreach($customers as $id => $entry)
                         <option value="{{ $id }}" {{ old('customer_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="amount">{{ trans('cruds.invoice.fields.amount') }}</label>
-                <input class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" type="number" name="amount" id="amount" value="{{ old('amount', '') }}" step="0.01" required>
+                <input class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" type="number" name="amount" id="amount" value="{{ old('amount', '') }}" step="0.01" required readonly>
                 @if($errors->has('amount'))
                     <span class="text-danger">{{ $errors->first('amount') }}</span>
                 @endif
@@ -38,6 +38,19 @@
     </div>
 </div>
 
+<script>
+    function getBalance(){
+        var customer_id = $('#customer_id').find(":selected").val();
+        
+        $.ajax({
+            method: 'GET',
+            url: "{{ route('admin.invoices.getBalance') }}" + '/' + customer_id,
+            success: function(data) {
+                $('#amount').val(data);
+            }
+            })
 
+    }
+</script>
 
 @endsection

@@ -9,6 +9,7 @@ use App\Http\Requests\StoreCrmCustomerRequest;
 use App\Http\Requests\UpdateCrmCustomerRequest;
 use App\Models\CrmCustomer;
 use App\Models\CrmStatus;
+use App\Models\Post;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +27,21 @@ class CrmCustomerController extends Controller
             $query = CrmCustomer::with(['status'])->select(sprintf('%s.*', (new CrmCustomer())->table));
             $table = Datatables::of($query);
 
+            $table->editColumn('balance', function ($row) {
+               
+            $balance=0;
+            $posts= Post::where([
+                ['sender_id','=',$row->id],
+                ['invoice_id', '=', null],
+                ['status_id', '=', 3], // where status_id == 3 (delivered)
+            ])->get();
+            if(!$posts->isEmpty()){
+                foreach($posts as $post){
+                    $balance = $balance + $post->sender_total;
+                }
+            }
+            return $balance;
+            });
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
 
@@ -62,9 +78,6 @@ class CrmCustomerController extends Controller
             });
             $table->editColumn('address', function ($row) {
                 return $row->address ? $row->address : '';
-            });
-            $table->editColumn('description', function ($row) {
-                return $row->description ? $row->description : '';
             });
 
             $table->rawColumns(['actions', 'placeholder', 'status']);
@@ -114,8 +127,13 @@ class CrmCustomerController extends Controller
         abort_if(Gate::denies('crm_customer_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $crmCustomer->load('status', 'customerCrmNotes', 'customerInvoices', 'senderPosts');
+        $posts= Post::where([
+            ['sender_id','=',$crmCustomer->id],
+            ['invoice_id', '=', null],
+            ['status_id', '=', 3], // where status_id == 3 (delivered)
+        ])->get();
 
-        return view('admin.crmCustomers.show', compact('crmCustomer'));
+        return view('admin.crmCustomers.show', compact('crmCustomer','posts'));
     }
 
     public function destroy(CrmCustomer $crmCustomer)

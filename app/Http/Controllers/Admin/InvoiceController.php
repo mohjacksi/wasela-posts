@@ -8,10 +8,15 @@ use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
 use App\Models\CrmCustomer;
 use App\Models\Invoice;
+use App\Models\Post;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+
+use LaravelDaily\Invoices\Invoice as newInvoice;
+use LaravelDaily\Invoices\Classes\Party;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
 
 class InvoiceController extends Controller
 {
@@ -77,7 +82,17 @@ class InvoiceController extends Controller
     public function store(StoreInvoiceRequest $request)
     {
         $invoice = Invoice::create($request->all());
-
+        $invoice->load('customer');
+        $posts= Post::where([
+            ['sender_id','=',$invoice->customer->id],
+            ['invoice_id', '=', null],
+            ['status_id', '=', 3], // where status_id == 3 (delivered)
+        ])->get();
+        if(!$posts->isEmpty()){
+            foreach($posts as $post){
+                $post->update(['invoice_id' => $invoice->id]);
+            }
+        }
         return redirect()->route('admin.invoices.index');
     }
 
@@ -122,5 +137,74 @@ class InvoiceController extends Controller
         Invoice::whereIn('id', request('ids'))->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function newCreate(Invoice $invoice)
+    {
+
+        abort_if(Gate::denies('invoice_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $invoice->load('customer', 'invoicePosts');
+
+        $client = new Party([
+            'name'          => $invoice->customer->name,
+            'phone'         => $invoice->customer->phone,
+            'custom_fields' => [
+                'address'        => $invoice->customer->address,
+            ],
+        ]);
+
+        $customer = new Party([
+            'custom_fields' => [
+                'number of customers'        => count($invoice->invoicePosts),
+            ],
+        ]);
+
+        $items = [];
+        if(!$invoice->invoicePosts->isEmpty()){
+            foreach($invoice->invoicePosts as $key=>$post){
+                $items[$key] = (new InvoiceItem())->title($post->barcode)->pricePerUnit($post->sender_total);
+            }
+        }
+
+        $newInvoice = newInvoice::make('Invoice')->template('newInvoice')
+            ->series($client->name.$invoice->id)
+            ->seller($client)
+            ->buyer($customer)
+            ->date($invoice->created_at)
+            ->dateFormat('m/d/Y')
+            ->currencySymbol('$')
+            ->currencyCode('USD')
+            ->currencyFormat('{SYMBOL}{VALUE}')
+            ->currencyThousandsSeparator('.')
+            ->currencyDecimalPoint(',')
+            ->filename($client->name . ' ' . $invoice->id)
+            ->addItems($items)
+            // You can additionally save generated invoice to configured disk
+            ->save('public');
+
+        $link = $newInvoice->url();
+
+        // And return invoice itself to browser or have a different view
+        return $newInvoice->download();
+
+    }
+
+    public function getBalance($id)
+    {
+        abort_if(Gate::denies('invoice_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $balance=0;
+        $posts= Post::where([
+            ['sender_id','=',$id],
+            ['invoice_id', '=', null],
+            ['status_id', '=', 3], // where status_id == 3 (delivered)
+        ])->get();
+        if(!$posts->isEmpty()){
+            foreach($posts as $post){
+                $balance = $balance + $post->sender_total;
+            }
+        }
+        return $balance; 
     }
 }

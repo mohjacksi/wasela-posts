@@ -65,6 +65,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('posts', 'PostController');
 
     // Invoice
+    Route::get('invoices/newCreate/{invoice}', 'InvoiceController@newCreate')->name('invoices.newCreate');
+    Route::get('invoices/getBalance/{id?}', 'InvoiceController@getBalance')->name('invoices.getBalance');
     Route::delete('invoices/destroy', 'InvoiceController@massDestroy')->name('invoices.massDestroy');
     Route::resource('invoices', 'InvoiceController');
 

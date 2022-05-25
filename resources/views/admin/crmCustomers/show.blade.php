@@ -111,7 +111,7 @@
             @includeIf('admin.crmCustomers.relationships.customerInvoices', ['invoices' => $crmCustomer->customerInvoices])
         </div>
         <div class="tab-pane" role="tabpanel" id="sender_posts">
-            @includeIf('admin.crmCustomers.relationships.senderPosts', ['posts' => $crmCustomer->senderPosts])
+            @includeIf('admin.crmCustomers.relationships.senderPosts', ['posts' => $posts])
         </div>
     </div>
 </div>

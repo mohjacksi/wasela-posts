@@ -44,7 +44,7 @@
                         {{ trans('cruds.crmCustomer.fields.address') }}
                     </th>
                     <th>
-                        {{ trans('cruds.crmCustomer.fields.description') }}
+                        {{ trans('cruds.crmCustomer.fields.balance') }}
                     </th>
                     <th>
                         &nbsp;
@@ -108,7 +108,7 @@
 { data: 'email', name: 'email' },
 { data: 'phone', name: 'phone' },
 { data: 'address', name: 'address' },
-{ data: 'description', name: 'description' },
+{ data: 'balance', name: 'balance' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,
