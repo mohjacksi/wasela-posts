@@ -38,6 +38,7 @@
                                         <input
                                             class="form-control {{ $errors->has('sender_total') ? 'is-invalid' : '' }}"
                                             type="number" name="sender_total" id="sender_total"
+                                            onchange="totalPrice()"
                                             value="{{ old('sender_total', '') }}" step="0.01" required>
                                         @if ($errors->has('sender_total'))
                                             <span class="text-danger">{{ $errors->first('sender_total') }}</span>
@@ -53,6 +54,7 @@
                                         <input
                                             class="form-control {{ $errors->has('delivery_price') ? 'is-invalid' : '' }}"
                                             type="number" name="delivery_price" id="delivery_price"
+                                            onchange="totalPrice()"
                                             value="{{ old('delivery_price', '') }}" step="0.01" required>
                                         @if ($errors->has('delivery_price'))
                                             <span class="text-danger">{{ $errors->first('delivery_price') }}</span>
@@ -68,7 +70,7 @@
                                         <input
                                             class="form-control {{ $errors->has('customer_invoice_total') ? 'is-invalid' : '' }}"
                                             type="number" name="customer_invoice_total" id="customer_invoice_total"
-                                            value="{{ old('customer_invoice_total', '') }}" step="0.01" required>
+                                            value="{{ old('customer_invoice_total', '') }}" step="0.01" required readonly>
                                         @if ($errors->has('customer_invoice_total'))
                                             <span
                                                 class="text-danger">{{ $errors->first('customer_invoice_total') }}</span>
@@ -245,4 +247,11 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function totalPrice(){
+            var total = Number($('#sender_total').val()) + Number($('#delivery_price').val());
+            $('#customer_invoice_total').val(total);    
+        }
+    </script>
 @endsection

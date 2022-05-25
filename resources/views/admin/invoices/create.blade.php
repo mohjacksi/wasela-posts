@@ -35,6 +35,8 @@
                 </button>
             </div>
         </form>
+
+        <div id="invoiceData"></div>
     </div>
 </div>
 
@@ -47,6 +49,7 @@
             url: "{{ route('admin.invoices.getBalance') }}" + '/' + customer_id,
             success: function(data) {
                 $('#amount').val(data);
+                // $('#invoiceData').innerHTML(data);
             }
             })
 
