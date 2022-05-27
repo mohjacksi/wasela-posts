@@ -34,12 +34,14 @@ class PostController extends Controller
                 $viewGate = 'post_show';
                 $editGate = 'post_edit';
                 $deleteGate = 'post_delete';
+                $statusGate = 'post_status';
                 $crudRoutePart = 'posts';
 
                 return view('partials.datatablesActions', compact(
                 'viewGate',
                 'editGate',
                 'deleteGate',
+                'statusGate',
                 'crudRoutePart',
                 'row'
             ));
@@ -146,6 +148,17 @@ class PostController extends Controller
         $post->load('sender', 'governorate', 'city', 'status', 'invoice');
 
         return view('admin.posts.edit', compact('cities', 'governorates', 'post', 'senders', 'statuses'));
+    }
+
+    public function editStatus($id, $status)
+    {
+        abort_if(Gate::denies('post_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $post=Post::find($id);
+        if(!empty($post)){
+            $post->status_id=$status;
+            $post->save();
+        }
+        return redirect()->route('admin.posts.index');
     }
 
     public function update(UpdatePostRequest $request, Post $post)

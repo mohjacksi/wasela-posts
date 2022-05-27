@@ -19,46 +19,14 @@
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.invoice.fields.id') }}
-                        </th>
-                        <td>
-                            {{ $invoice->id }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.invoice.fields.customer') }}
-                        </th>
-                        <td>
-                            {{ $invoice->customer->email ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.invoice.fields.amount') }}
-                        </th>
-                        <td>
-                            {{ $invoice->amount }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.invoice.fields.created_at') }}
-                        </th>
-                        <td>
-                            {{ $invoice->created_at }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.invoice.fields.updated_at') }}
-                        </th>
-                        <td>
-                            {{ $invoice->updated_at }}
-                        </td>
-                    </tr>
+                    <iframe 
+                    name="invoiceData"
+                    id="invoiceData" 
+                    srcdoc="{{$newInvoice}}"
+                    src="#"
+                    width="100%"
+                    height="500rem"
+                ></iframe>
                 </tbody>
             </table>
             <div class="form-group">

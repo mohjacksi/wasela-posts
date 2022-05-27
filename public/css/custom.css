@@ -7586,3 +7586,15 @@ a.icon-btn {
 .menu-badge {
     color: #fff !important;
 }
+
+.btn-danger{
+    background-color: #dc3545!important;
+}
+
+.btn-danger span{
+    color: white!important;
+}
+
+.info-box-text,.info-box-number{
+    color: black;
+}

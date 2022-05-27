@@ -254,6 +254,8 @@ return [
             'invoice_helper'                => ' ',
             'barcode'                       => 'الباركود',
             'barcode_helper'                => ' ',
+            'delivered'                     => 'تم التوصيل',
+            'rejected'                       => 'مرفوض',
         ],
     ],
     'invoice' => [

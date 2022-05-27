@@ -25,6 +25,10 @@
                         {{ trans('cruds.post.fields.id') }}
                     </th>
                     <th>
+                        {{ trans('global.actions') }}
+                        &nbsp;
+                    </th>
+                    <th>
                         {{ trans('cruds.post.fields.barcode') }}
                     </th>
                     <th>
@@ -66,15 +70,15 @@
                     <th>
                         {{ trans('cruds.post.fields.invoice') }}
                     </th>
-                    <th>
-                        &nbsp;
-                    </th>
+                    
                 </tr>
                 <tr>
                     <td>
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
@@ -142,8 +146,7 @@
                             @endforeach
                         </select>
                     </td>
-                    <td>
-                    </td>
+                    
                 </tr>
             </thead>
         </table>
@@ -198,6 +201,8 @@
     columns: [
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
+
+{ data: 'actions', name: '{{ trans('global.actions') }}' },
 { data: 'barcode', name: 'barcode' },
 { data: 'sender_name', name: 'sender.name' },
 { data: 'sender.name', name: 'sender.name' },
@@ -211,8 +216,7 @@
 { data: 'customer_invoice_total', name: 'customer_invoice_total' },
 { data: 'status_name', name: 'status.name' },
 { data: 'notes', name: 'notes' },
-{ data: 'invoice_amount', name: 'invoice.amount' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
+{ data: 'invoice_amount', name: 'invoice.amount' }
     ],
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],

@@ -93,7 +93,7 @@ class InvoiceController extends Controller
                 $post->update(['invoice_id' => $invoice->id]);
             }
         }
-        return redirect()->route('admin.invoices.index');
+        return redirect()->route('admin.invoices.show',$invoice->id);
     }
 
     public function edit(Invoice $invoice)
@@ -119,8 +119,10 @@ class InvoiceController extends Controller
         abort_if(Gate::denies('invoice_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $invoice->load('customer', 'invoicePosts');
+        $newInvoice=$this->createInvoice(0,$invoice->id);
+        $newInvoice = $newInvoice->toHtml();
 
-        return view('admin.invoices.show', compact('invoice'));
+        return view('admin.invoices.show', compact('invoice','newInvoice'));
     }
 
     public function destroy(Invoice $invoice)
@@ -146,43 +148,7 @@ class InvoiceController extends Controller
 
         $invoice->load('customer', 'invoicePosts');
 
-        $client = new Party([
-            'name'          => $invoice->customer->name,
-            'phone'         => $invoice->customer->phone,
-            'custom_fields' => [
-                'address'        => $invoice->customer->address,
-            ],
-        ]);
-
-        $customer = new Party([
-            'custom_fields' => [
-                'number of customers'        => count($invoice->invoicePosts),
-            ],
-        ]);
-
-        $items = [];
-        if(!$invoice->invoicePosts->isEmpty()){
-            foreach($invoice->invoicePosts as $key=>$post){
-                $items[$key] = (new InvoiceItem())->title($post->barcode)->pricePerUnit($post->sender_total);
-            }
-        }
-
-        $newInvoice = newInvoice::make('Invoice')->template('newInvoice')
-            ->series($client->name.$invoice->id)
-            ->seller($client)
-            ->buyer($customer)
-            ->date($invoice->created_at)
-            ->dateFormat('m/d/Y')
-            ->currencySymbol('$')
-            ->currencyCode('USD')
-            ->currencyFormat('{SYMBOL}{VALUE}')
-            ->currencyThousandsSeparator('.')
-            ->currencyDecimalPoint(',')
-            ->filename($client->name . ' ' . $invoice->id)
-            ->addItems($items)
-            // You can additionally save generated invoice to configured disk
-            ->save('public');
-
+        $newInvoice=$this->createInvoice($invoice->customer->id,$invoice->id);
         $link = $newInvoice->url();
 
         // And return invoice itself to browser or have a different view
@@ -205,6 +171,94 @@ class InvoiceController extends Controller
                 $balance = $balance + $post->sender_total;
             }
         }
-        return $balance; 
+
+        $newInvoice=$this->createInvoice($id);
+        $data[0]= $balance;
+        $data[1]= $newInvoice->toHtml()->render();
+
+        return $data; 
     }
+
+    public function createInvoice($client_id , $invoice_id=null)
+    {
+
+        abort_if(Gate::denies('invoice_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        if($invoice_id){
+            $invoice=Invoice::with('customer', 'invoicePosts')->where('id',$invoice_id)->first();
+            $client = new Party([
+                'name'          => $invoice->customer->name,
+                'phone'         => $invoice->customer->phone,
+                'custom_fields' => [
+                    'address'        => $invoice->customer->address,
+                ],
+            ]);
+            $posts=$invoice->invoicePosts;
+            $invoiceDate=$invoice->created_at;
+        }else{       
+            $clientData = CrmCustomer::with('senderPosts','customerInvoices')->where('id',$client_id)->first();
+            if(empty($clientData)){     
+                $client = new Party([
+                    'name'          => 'No seller',
+                    'phone'         => 'No seller',
+                ]);
+                $newInvoice = newInvoice::make('invoice')->template('emptyInvoice')
+                ->seller($client);
+                return $newInvoice; 
+            }
+
+            $client = new Party([
+                'name'          => $clientData->name,
+                'phone'         => $clientData->phone,
+                'custom_fields' => [
+                    'address'        => $clientData->address,
+                ],
+            ]);
+            $posts= Post::where([
+                ['sender_id','=',$client_id],
+                ['invoice_id', '=', null],
+                ['status_id', '=', 3], // where status_id == 3 (delivered)
+            ])->get();
+            $invoiceDate=now();
+
+            if($posts->isEmpty()){     
+
+            $newInvoice = newInvoice::make('invoice')->template('emptyInvoice')
+            ->seller($client);
+            return $newInvoice; 
+            }
+        }
+        
+        $customer = new Party([
+            'custom_fields' => [
+                'number of customers'        => count($posts),
+            ],
+        ]);
+
+        $items = [];
+        if(!$posts->isEmpty()){
+            foreach($posts as $key=>$post){
+                $items[$key] = (new InvoiceItem())->title($post->barcode)->pricePerUnit($post->sender_total);
+            }
+        }
+
+        $newInvoice = newInvoice::make('Invoice')->template('newInvoice')
+            ->series($client->name.now())
+            ->seller($client)
+            ->buyer($customer)
+            ->date($invoiceDate)
+            ->dateFormat('m/d/Y')
+            ->currencySymbol('$')
+            ->currencyCode('USD')
+            ->currencyFormat('{SYMBOL}{VALUE}')
+            ->currencyThousandsSeparator('.')
+            ->currencyDecimalPoint(',')
+            ->filename($client->name . ' ' . now())
+            ->addItems($items)
+            ->save('public');
+
+        return $newInvoice;
+
+    }
+
 }

@@ -36,7 +36,16 @@
             </div>
         </form>
 
-        <div id="invoiceData"></div>
+            <iframe 
+                name="invoiceData"
+                id="invoiceData" 
+                srcdoc=""
+                src="#"
+                width="100%"
+                height="500rem"
+            ></iframe>
+            
+        {{-- <div id="invoiceData"></div> --}}
     </div>
 </div>
 
@@ -48,8 +57,13 @@
             method: 'GET',
             url: "{{ route('admin.invoices.getBalance') }}" + '/' + customer_id,
             success: function(data) {
-                $('#amount').val(data);
-                // $('#invoiceData').innerHTML(data);
+                console.log(data[1]['data']);
+                $('#amount').val(data[0]);
+                $('#invoiceData').attr("srcdoc",data[1]);
+            },
+            error: function(e) 
+            {
+                alert('Error: ' + e);
             }
             })
 
