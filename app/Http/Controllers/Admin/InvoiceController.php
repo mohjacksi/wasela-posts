@@ -119,7 +119,7 @@ class InvoiceController extends Controller
         abort_if(Gate::denies('invoice_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $invoice->load('customer', 'invoicePosts');
-        $newInvoice=$this->createInvoice(0,$invoice->id);
+        $newInvoice=$this->createInvoice(0,$invoice->id,'arabicInvoice');
         $newInvoice = $newInvoice->toHtml();
 
         return view('admin.invoices.show', compact('invoice','newInvoice'));
@@ -172,14 +172,14 @@ class InvoiceController extends Controller
             }
         }
 
-        $newInvoice=$this->createInvoice($id);
+        $newInvoice=$this->createInvoice($id, null ,'arabicInvoice');
         $data[0]= $balance;
         $data[1]= $newInvoice->toHtml()->render();
 
         return $data; 
     }
 
-    public function createInvoice($client_id , $invoice_id=null)
+    public function createInvoice($client_id , $invoice_id=null , $template=null)
     {
 
         abort_if(Gate::denies('invoice_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -189,9 +189,8 @@ class InvoiceController extends Controller
             $client = new Party([
                 'name'          => $invoice->customer->name,
                 'phone'         => $invoice->customer->phone,
-                'custom_fields' => [
-                    'address'        => $invoice->customer->address,
-                ],
+                'address'        => $invoice->customer->address,
+                
             ]);
             $posts=$invoice->invoicePosts;
             $invoiceDate=$invoice->created_at;
@@ -210,9 +209,7 @@ class InvoiceController extends Controller
             $client = new Party([
                 'name'          => $clientData->name,
                 'phone'         => $clientData->phone,
-                'custom_fields' => [
-                    'address'        => $clientData->address,
-                ],
+                'address'        => $clientData->address,
             ]);
             $posts= Post::where([
                 ['sender_id','=',$client_id],
@@ -231,7 +228,7 @@ class InvoiceController extends Controller
         
         $customer = new Party([
             'custom_fields' => [
-                'number of customers'        => count($posts),
+                'Number of customers'        => count($posts),
             ],
         ]);
 
@@ -242,7 +239,10 @@ class InvoiceController extends Controller
             }
         }
 
-        $newInvoice = newInvoice::make('Invoice')->template('newInvoice')
+        if($template == null){
+            $template='newInvoice';
+        }
+        $newInvoice = newInvoice::make('Invoice')->template($template)
             ->series($client->name.now())
             ->seller($client)
             ->buyer($customer)

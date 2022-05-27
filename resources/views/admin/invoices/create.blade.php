@@ -57,7 +57,6 @@
             method: 'GET',
             url: "{{ route('admin.invoices.getBalance') }}" + '/' + customer_id,
             success: function(data) {
-                console.log(data[1]['data']);
                 $('#amount').val(data[0]);
                 $('#invoiceData').attr("srcdoc",data[1]);
             },
