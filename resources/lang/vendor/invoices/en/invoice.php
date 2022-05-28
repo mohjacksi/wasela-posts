@@ -20,10 +20,10 @@ return [
     'units'                  => 'Units',
     'quantity'               => 'Qty',
     'price'                  => 'Price',
-    'discount'               => 'Discount',
+    'discount'               => 'Rejected Items',
     'tax'                    => 'Tax',
     'sub_total'              => 'Sub total',
-    'total_discount'         => 'Total discount',
+    'total_discount'         => 'Total Rejected',
     'taxable_amount'         => 'Taxable amount',
     'total_taxes'            => 'Total taxes',
     'tax_rate'               => 'Tax rate',
@@ -35,4 +35,6 @@ return [
     'shipping'               => 'Shipping',
     'paid'                   => 'Paid',
     'due'                    => 'Due',
+    'status'                 => 'Status',
+    
 ];

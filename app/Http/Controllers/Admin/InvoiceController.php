@@ -211,10 +211,10 @@ class InvoiceController extends Controller
                 'phone'         => $clientData->phone,
                 'address'        => $clientData->address,
             ]);
-            $posts= Post::where([
+            $posts= Post::with('status')->where([
                 ['sender_id','=',$client_id],
                 ['invoice_id', '=', null],
-                ['status_id', '=', 3], // where status_id == 3 (delivered)
+                // ['status_id', '=', 3], // where status_id == 3 (delivered)
             ])->get();
             $invoiceDate=now();
 
@@ -235,7 +235,14 @@ class InvoiceController extends Controller
         $items = [];
         if(!$posts->isEmpty()){
             foreach($posts as $key=>$post){
-                $items[$key] = (new InvoiceItem())->title($post->barcode)->pricePerUnit($post->sender_total);
+                if($post->status_id != 3){
+                    $items[$key] = (new InvoiceItem())->title($post->barcode.' ( '.$post->receiver_name.' : '.$post->delivery_address.' ) ')
+                    ->pricePerUnit($post->sender_total)->discount($post->sender_total)->description($post->status->name);
+                }else{
+                    $items[$key] = (new InvoiceItem())->title($post->barcode.' ( '.$post->receiver_name.' : '.$post->delivery_address.' ) ')
+                    ->pricePerUnit($post->sender_total)->discount('0')->description($post->status->name);
+                }
+                
             }
         }
 
