@@ -13,9 +13,9 @@
                     {{ trans('global.back_to_list') }}
                 </a>
 
-                <a class="btn btn-primary" href="#" onclick="newInvoice()">
+                {{-- <a class="btn btn-primary" href="#" onclick="newInvoice()">
                     {{ trans('cruds.invoice.download') }}
-                </a>
+                </a> --}}
 
                 <a class="btn btn-info" href="#" onclick="printInvoice()">
                     {{ trans('cruds.invoice.print') }}
@@ -81,6 +81,24 @@
 
         return false;
     }
-    
+
+    function toPDF(){       
+        var doc = new jsPDF();          
+        var elementHandler = {
+        '#ignorePDF': function (element, renderer) {
+            return true;
+        }
+        };
+        var source = window.document.getElementsByTagName("body")[0];
+        doc.fromHTML(
+            source,
+            15,
+            15,
+            {
+            'width': 180,'elementHandlers': elementHandler
+            });
+
+        doc.output("dataurlnewwindow");
+    }
 </script>
 @endsection
