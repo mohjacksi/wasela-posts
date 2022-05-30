@@ -5,7 +5,7 @@
     <title>{{ $invoice->name }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <style type="text/css" media="screen">
+    <style type="text/css" media="screen , print">
         html {
             font-family: sans-serif;
             line-height: 1.15;
@@ -145,6 +145,10 @@
 
         .cool-gray {
             color: #6B7280;
+        }
+        .rejected {
+            background-color: lightsalmon;
+            -webkit-print-color-adjust: exact;
         }
 
     </style>
@@ -294,7 +298,7 @@
             {{-- Items --}}
             @foreach ($invoice->items as $item)
             @if($item->discount > 0)
-                <tr style="background-color: lightsalmon;">
+                <tr class="rejected">
             @else
             <tr>
             @endif

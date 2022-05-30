@@ -159,6 +159,36 @@
 @section('scripts')
 @parent
 <script>
+    function changeStatus(id,status_id){
+        let table = $('.datatable-Post').DataTable();
+        var rowIndex = null;
+            table.rows( function ( idx, data, node ) {             
+            if(data.id === id){
+                rowIndex=idx;                  
+            }
+            return false;
+        });
+
+        console.log(rowIndex);
+        if(rowIndex || rowIndex === 0){
+            $.ajax({
+                method: 'GET',
+                url: "{{ route('admin.post.editStatus') }}" + '/' + id + '/' + status_id,
+                success: function(data) {
+                    if(data){
+                        table.cell({row:rowIndex, column:15}).data(data).draw();
+                    }
+
+                },
+                error: function(e) 
+                {
+                    alert('Error: ' + e);
+                }
+            })
+        }
+
+    }
+    
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('post_delete')

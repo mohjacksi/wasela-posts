@@ -157,8 +157,10 @@ class PostController extends Controller
         if(!empty($post)){
             $post->status_id=$status;
             $post->save();
+            $post->load('status');
+            return $post->status->name;
         }
-        return redirect()->route('admin.posts.index');
+        return null;
     }
 
     public function update(UpdatePostRequest $request, Post $post)
@@ -191,5 +193,17 @@ class PostController extends Controller
         Post::whereIn('id', request('ids'))->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+    
+    public function deliveryPrice($id)
+    {
+        $city=City::find($id);
+        return $city->default_price;
+    }
+    
+    public function changeCity($id)
+    {
+        $cities=Governorate::with('cities')->find($id);
+        return $cities->cities;
     }
 }

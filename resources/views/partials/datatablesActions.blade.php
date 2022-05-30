@@ -9,10 +9,22 @@
     </a>
 @endcan
 @if(isset($statusGate))
-    <a class="btn btn-xs btn-success" href="{{ route('admin.post.editStatus',['id'=>$row->id, 'status'=>3]) }}">
+    <a 
+    @if($row->status->id == 3)
+    class="btn btn-xs btn-success disabled"
+    @else
+    class="btn btn-xs btn-success"
+    @endif
+    onclick="changeStatus({{$row->id}},3)" href="#">
         {{ trans('cruds.post.fields.delivered') }}
     </a>
-    <a class="btn btn-xs btn-warning" href="{{ route('admin.post.editStatus', ['id'=>$row->id, 'status'=>2]) }}">
+    <a 
+    @if($row->status->id == 2)
+    class="btn btn-xs btn-warning disabled"
+    @else
+    class="btn btn-xs btn-warning"
+    @endif
+    onclick="changeStatus({{$row->id}},2)" href="#">
         {{ trans('cruds.post.fields.rejected') }}
     </a>
 @endif

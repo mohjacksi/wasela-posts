@@ -86,7 +86,7 @@ class InvoiceController extends Controller
         $posts= Post::where([
             ['sender_id','=',$invoice->customer->id],
             ['invoice_id', '=', null],
-            ['status_id', '=', 3], // where status_id == 3 (delivered)
+            // ['status_id', '=', 3], // where status_id == 3 (delivered)
         ])->get();
         if(!$posts->isEmpty()){
             foreach($posts as $post){
@@ -128,7 +128,12 @@ class InvoiceController extends Controller
     public function destroy(Invoice $invoice)
     {
         abort_if(Gate::denies('invoice_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
+        if(!$invoice->invoicePosts->isEmpty()){
+            foreach($invoice->invoicePosts as $post){
+                $post->invoice_id=null;
+                $post->save();
+            }
+        }
         $invoice->delete();
 
         return back();
@@ -136,7 +141,20 @@ class InvoiceController extends Controller
 
     public function massDestroy(MassDestroyInvoiceRequest $request)
     {
-        Invoice::whereIn('id', request('ids'))->delete();
+        $invoice=Invoice::with('invoicePosts')->whereIn('id', request('ids'))->get();
+        if(!$invoice->isEmpty()){
+            foreach($invoice as $oneInvoice){
+                if(!$oneInvoice->invoicePosts->isEmpty()){
+                    foreach($oneInvoice->invoicePosts as $post){
+                        $post->invoice_id=null;
+                        $post->save();
+                    }
+                }
+            }
+        }
+        
+        $invoice=Invoice::whereIn('id', request('ids'))->delete();
+
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
@@ -190,8 +208,16 @@ class InvoiceController extends Controller
                 'name'          => $invoice->customer->name,
                 'phone'         => $invoice->customer->phone,
                 'address'        => $invoice->customer->address,
-                
             ]);
+            if($invoice->invoicePosts->isEmpty()){     
+                $client = new Party([
+                    'name'          => 'No seller',
+                    'phone'         => 'No seller',
+                ]);
+                $newInvoice = newInvoice::make('invoice')->template('emptyInvoice')
+                ->seller($client);
+                return $newInvoice;
+            }
             $posts=$invoice->invoicePosts;
             $invoiceDate=$invoice->created_at;
         }else{       
@@ -203,7 +229,7 @@ class InvoiceController extends Controller
                 ]);
                 $newInvoice = newInvoice::make('invoice')->template('emptyInvoice')
                 ->seller($client);
-                return $newInvoice; 
+                return $newInvoice;
             }
 
             $client = new Party([

@@ -55,7 +55,7 @@
                                             class="form-control {{ $errors->has('delivery_price') ? 'is-invalid' : '' }}"
                                             type="number" name="delivery_price" id="delivery_price"
                                             onchange="totalPrice()"
-                                            value="{{ old('delivery_price', '') }}" step="0.01" required>
+                                            value="{{ old('delivery_price', '') }}" step="0.01" required readonly>
                                         @if ($errors->has('delivery_price'))
                                             <span class="text-danger">{{ $errors->first('delivery_price') }}</span>
                                         @endif
@@ -126,7 +126,7 @@
                                         <label for="governorate_id">{{ trans('cruds.post.fields.governorate') }}</label>
                                         <select
                                             class="form-control select2 {{ $errors->has('governorate') ? 'is-invalid' : '' }}"
-                                            name="governorate_id" id="governorate_id">
+                                            name="governorate_id" id="governorate_id" onchange="changeCity()">
                                             @foreach ($governorates as $id => $entry)
                                                 <option value="{{ $id }}"
                                                     {{ old('governorate_id') == $id ? 'selected' : '' }}>
@@ -144,12 +144,10 @@
                                         <label for="city_id">{{ trans('cruds.post.fields.city') }}</label>
                                         <select
                                             class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}"
-                                            name="city_id" id="city_id">
-                                            @foreach ($cities as $id => $entry)
-                                                <option value="{{ $id }}"
-                                                    {{ old('city_id') == $id ? 'selected' : '' }}>
-                                                    {{ $entry }}</option>
-                                            @endforeach
+                                            name="city_id" id="city_id" onchange="deliveryPrice()">
+                                                <option value="0" 
+                                                    {{ old('city_id') == $id ? 'selected' : '' }} hidden>
+                                                    </option>
                                         </select>
                                         @if ($errors->has('city'))
                                             <span class="text-danger">{{ $errors->first('city') }}</span>
@@ -190,7 +188,7 @@
                                         <label class="required"
                                             for="barcode">{{ trans('cruds.post.fields.barcode') }}</label>
                                         <input class="form-control {{ $errors->has('barcode') ? 'is-invalid' : '' }}"
-                                            type="number" name="barcode" id="barcode" value="{{ old('barcode', '') }}"
+                                            type="number" name="barcode" id="barcode" value="{{ sprintf("%06d", mt_rand(1, 9999999)) }}"
                                             step="1" readonly required>
                                         @if ($errors->has('barcode'))
                                             <span class="text-danger">{{ $errors->first('barcode') }}</span>
@@ -253,5 +251,36 @@
             var total = Number($('#sender_total').val()) + Number($('#delivery_price').val());
             $('#customer_invoice_total').val(total);    
         }
+        function deliveryPrice(){
+            var id = $('#city_id').find(":selected").val();
+            $.ajax({
+            method: 'GET',
+            url: "{{ route('admin.post.deliveryPrice') }}" + '/' + id,
+            success: function(data) {
+                if(data){
+                    $('#delivery_price').val(data);
+                }
+
+            }
+            })  
+        }
+
+        function changeCity(){
+            var id = $('#governorate_id').find(":selected").val();
+            $.ajax({
+            method: 'GET',
+            url: "{{ route('admin.post.changeCity') }}" + '/' + id,
+            success: function (data) {
+            var city=$('#city_id');
+            city.empty();
+            city.append('<option>الرجاء الإختيار</option>');
+            for (var i = 0; i < data.length; i++) {
+                city.append('<option value=' + data[i].id + '>' + data[i].name + '</option>');
+            };
+            }
+            })  
+        }
+
+       
     </script>
 @endsection
