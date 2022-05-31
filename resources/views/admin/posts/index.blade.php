@@ -29,6 +29,9 @@
                         &nbsp;
                     </th>
                     <th>
+                        {{ trans('cruds.post.fields.status') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.post.fields.barcode') }}
                     </th>
                     <th>
@@ -61,16 +64,14 @@
                     <th>
                         {{ trans('cruds.post.fields.customer_invoice_total') }}
                     </th>
-                    <th>
-                        {{ trans('cruds.post.fields.status') }}
-                    </th>
+
                     <th>
                         {{ trans('cruds.post.fields.notes') }}
                     </th>
                     <th>
                         {{ trans('cruds.post.fields.invoice') }}
                     </th>
-                    
+
                 </tr>
                 <tr>
                     <td>
@@ -79,6 +80,14 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
+                    </td>
+                    <td>
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($post_statuses as $key => $item)
+                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
@@ -128,14 +137,6 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
-                        <select class="search">
-                            <option value>{{ trans('global.all') }}</option>
-                            @foreach($post_statuses as $key => $item)
-                                <option value="{{ $item->name }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </td>
-                    <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
@@ -146,7 +147,7 @@
                             @endforeach
                         </select>
                     </td>
-                    
+
                 </tr>
             </thead>
         </table>
@@ -162,9 +163,9 @@
     function changeStatus(id,status_id){
         let table = $('.datatable-Post').DataTable();
         var rowIndex = null;
-            table.rows( function ( idx, data, node ) {             
+            table.rows( function ( idx, data, node ) {
             if(data.id === id){
-                rowIndex=idx;                  
+                rowIndex=idx;
             }
             return false;
         });
@@ -180,7 +181,7 @@
                     }
 
                 },
-                error: function(e) 
+                error: function(e)
                 {
                     alert('Error: ' + e);
                 }
@@ -188,7 +189,7 @@
         }
 
     }
-    
+
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('post_delete')
@@ -233,6 +234,7 @@
 { data: 'id', name: 'id' },
 
 { data: 'actions', name: '{{ trans('global.actions') }}' },
+{ data: 'status_name', name: 'status.name' },
 { data: 'barcode', name: 'barcode' },
 { data: 'sender_name', name: 'sender.name' },
 { data: 'sender.name', name: 'sender.name' },
@@ -244,7 +246,6 @@
 { data: 'sender_total', name: 'sender_total' },
 { data: 'delivery_price', name: 'delivery_price' },
 { data: 'customer_invoice_total', name: 'customer_invoice_total' },
-{ data: 'status_name', name: 'status.name' },
 { data: 'notes', name: 'notes' },
 { data: 'invoice_amount', name: 'invoice.amount' }
     ],
@@ -257,7 +258,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 let visibleColumnsIndexes = null;
 $('.datatable thead').on('input', '.search', function () {
       let strict = $(this).attr('strict') || false

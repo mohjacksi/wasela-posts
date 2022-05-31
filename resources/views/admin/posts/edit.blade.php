@@ -104,7 +104,7 @@
             </div>
             <div class="form-group">
                 <label for="status_id">{{ trans('cruds.post.fields.status') }}</label>
-                <select class="form-control select2 {{ $errors->has('status') ? 'is-invalid' : '' }}" name="status_id" id="status_id">
+                <select class="form-control select2 {{ $errors->has('status') ? 'is-invalid' : '' }}" name="status_id" id="status_id" {{ $post->invoice_id == null ? '' : 'disabled'}}>
                     @foreach($statuses as $id => $entry)
                         <option value="{{ $id }}" {{ (old('status_id') ? old('status_id') : $post->status->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach

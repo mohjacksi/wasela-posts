@@ -145,7 +145,7 @@
                                         <select
                                             class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}"
                                             name="city_id" id="city_id" onchange="deliveryPrice()">
-                                                <option value="0" 
+                                                <option value="0"
                                                     {{ old('city_id') == $id ? 'selected' : '' }} hidden>
                                                     </option>
                                         </select>
@@ -203,12 +203,13 @@
                                         <div class="form-group">
                                             <label for="status_id">{{ trans('cruds.post.fields.status') }}</label>
                                             <select
-                                                class="form-control select2 {{ $errors->has('status') ? 'is-invalid' : '' }}"
+                                                class="form-control select2 {{ $errors->has('status') ? 'is-invalid' : '' }}" readonly
                                                 name="status_id" id="status_id">
                                                 @foreach ($statuses as $id => $entry)
                                                     <option value="{{ $id }}"
-                                                        {{ old('status_id') == $id ? 'selected' : '' }}>
-                                                        {{ $entry }}</option>
+                                                    {{ 1 == $id ? 'selected' : '' }}>
+                                                    {{-- {{ old('status_id') == $id ? 'selected' : '' }}> --}}
+                                                    {{ $entry }}</option>
                                                 @endforeach
                                             </select>
                                             @if ($errors->has('status'))
@@ -249,7 +250,7 @@
     <script>
         function totalPrice(){
             var total = Number($('#sender_total').val()) + Number($('#delivery_price').val());
-            $('#customer_invoice_total').val(total);    
+            $('#customer_invoice_total').val(total);
         }
         function deliveryPrice(){
             var id = $('#city_id').find(":selected").val();
@@ -262,7 +263,7 @@
                 }
 
             }
-            })  
+            })
         }
 
         function changeCity(){
@@ -278,9 +279,9 @@
                 city.append('<option value=' + data[i].id + '>' + data[i].name + '</option>');
             };
             }
-            })  
+            })
         }
 
-       
+        $('#status_id'). select2('destroy'). attr("readonly", true)
     </script>
 @endsection
