@@ -16,7 +16,7 @@ return [
     'code'                   => 'Code',
     'vat'                    => 'VAT code',
     'phone'                  => 'Phone',
-    'description'            => 'Description',
+    'description'            => 'الوصف',
     'units'                  => 'Units',
     'quantity'               => 'Qty',
     'price'                  => 'Price',
@@ -36,5 +36,5 @@ return [
     'paid'                   => 'Paid',
     'due'                    => 'Due',
     'status'                 => 'Status',
-    
+
 ];
