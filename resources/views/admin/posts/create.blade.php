@@ -55,7 +55,7 @@
                                             class="form-control {{ $errors->has('delivery_price') ? 'is-invalid' : '' }}"
                                             type="number" name="delivery_price" id="delivery_price"
                                             onchange="totalPrice()"
-                                            value="{{ old('delivery_price', '') }}" step="0.01" required readonly>
+                                            value="{{ old('delivery_price', '') }}" step="0.01" required>
                                         @if ($errors->has('delivery_price'))
                                             <span class="text-danger">{{ $errors->first('delivery_price') }}</span>
                                         @endif

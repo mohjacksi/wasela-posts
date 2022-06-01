@@ -259,8 +259,8 @@ return [
         ],
     ],
     'invoice' => [
-        'title'          => 'الوصولات العملاء',
-        'title_singular' => 'الوصولات العملاء',
+        'title'          => 'وصولات العملاء',
+        'title_singular' => 'وصولات العملاء',
         'fields'         => [
             'id'                => 'ID',
             'id_helper'         => ' ',
