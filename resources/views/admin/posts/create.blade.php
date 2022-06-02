@@ -53,8 +53,8 @@
                                             for="delivery_price">{{ trans('cruds.post.fields.delivery_price') }}</label>
                                         <input
                                             class="form-control {{ $errors->has('delivery_price') ? 'is-invalid' : '' }}"
-                                            type="number" name="delivery_price" id="delivery_price"
-                                            onchange="totalPrice()"
+                                            type="number" name="delivery_price" id="delivery_price" isChangable="true"
+                                            onchange="totalPrice(); $('#delivery_price').attr('isChangable','false');"
                                             value="{{ old('delivery_price', '') }}" step="0.01" required>
                                         @if ($errors->has('delivery_price'))
                                             <span class="text-danger">{{ $errors->first('delivery_price') }}</span>
@@ -254,25 +254,30 @@
         }
         function deliveryPrice(){
             var id = $('#city_id').find(":selected").val();
-            $.ajax({
-            method: 'GET',
-            url: "{{ route('admin.post.deliveryPrice') }}" + '/' + id,
-            success: function(data) {
-                if(data){
-                    $('#delivery_price').val(data);
-                }
+            var isChangable = $('#delivery_price').attr('isChangable');
+            if(isChangable == 'true'){
+                $.ajax({
+                method: 'GET',
+                url: "{{ route('admin.post.deliveryPrice') }}" + '/' + id,
+                success: function(data) {
+                    if(data){
+                        $('#delivery_price').val(data);
+                        totalPrice();
+                    }
 
+                }
+                })
             }
-            })
         }
 
         function changeCity(){
             var id = $('#governorate_id').find(":selected").val();
+            var city=$('#city_id');
+            if(id != ''){
             $.ajax({
             method: 'GET',
             url: "{{ route('admin.post.changeCity') }}" + '/' + id,
             success: function (data) {
-            var city=$('#city_id');
             city.empty();
             city.append('<option>الرجاء الإختيار</option>');
             for (var i = 0; i < data.length; i++) {
@@ -280,6 +285,10 @@
             };
             }
             })
+            }else{
+                city.empty();
+                city.append('<option>الرجاء الإختيار</option>');
+            }
         }
 
         $('#status_id'). select2('destroy'). attr("readonly", true)
