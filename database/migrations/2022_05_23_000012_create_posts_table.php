@@ -18,6 +18,7 @@ class CreatePostsTable extends Migration
             $table->decimal('delivery_price', 15, 2);
             $table->decimal('customer_invoice_total', 15, 2);
             $table->longText('notes')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

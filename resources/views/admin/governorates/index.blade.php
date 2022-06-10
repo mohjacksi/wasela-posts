@@ -32,6 +32,9 @@
                         {{ trans('cruds.governorate.fields.name') }}
                     </th>
                     <th>
+                        {{ trans('cruds.city.fields.default_price') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -89,6 +92,7 @@
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
 { data: 'name', name: 'name' },
+{ data: 'default_price', name: 'default_price' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

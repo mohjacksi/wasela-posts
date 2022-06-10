@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+[@extends('layouts.admin')
 @section('content')
     <div class="card">
         <div class="card-header">
@@ -70,7 +70,7 @@
                                         <input
                                             class="form-control {{ $errors->has('customer_invoice_total') ? 'is-invalid' : '' }}"
                                             type="number" name="customer_invoice_total" id="customer_invoice_total"
-                                            value="{{ old('customer_invoice_total', '') }}" step="0.01" required readonly>
+                                            value="{{ old('customer_invoice_total', '') }}" step="0.01" required>
                                         @if ($errors->has('customer_invoice_total'))
                                             <span
                                                 class="text-danger">{{ $errors->first('customer_invoice_total') }}</span>
@@ -126,7 +126,7 @@
                                         <label for="governorate_id">{{ trans('cruds.post.fields.governorate') }}</label>
                                         <select
                                             class="form-control select2 {{ $errors->has('governorate') ? 'is-invalid' : '' }}"
-                                            name="governorate_id" id="governorate_id" onchange="changeCity()">
+                                            name="governorate_id" id="governorate_id" onchange="changeCity(); deliveryPrice()">
                                             @foreach ($governorates as $id => $entry)
                                                 <option value="{{ $id }}"
                                                     {{ old('governorate_id') == $id ? 'selected' : '' }}>
@@ -144,7 +144,7 @@
                                         <label for="city_id">{{ trans('cruds.post.fields.city') }}</label>
                                         <select
                                             class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}"
-                                            name="city_id" id="city_id" onchange="deliveryPrice()">
+                                            name="city_id" id="city_id">
                                                 <option value="0"
                                                     {{ old('city_id') == $id ? 'selected' : '' }} hidden>
                                                     </option>
@@ -182,14 +182,26 @@
                             </h5>
                             <div class="card-body">
 
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="type">{{ trans('cruds.post.fields.type') }}</label>
+                                            <input class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}"
+                                                type="text" name="type" id="type" step="1">
+                                            @if ($errors->has('type'))
+                                                <span class="text-danger">{{ $errors->first('type') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="required"
                                             for="barcode">{{ trans('cruds.post.fields.barcode') }}</label>
                                         <input class="form-control {{ $errors->has('barcode') ? 'is-invalid' : '' }}"
-                                            type="number" name="barcode" id="barcode" value="{{ sprintf("%06d", mt_rand(1, 9999999)) }}"
-                                            step="1" readonly required>
+                                            type="text" name="barcode" id="barcode" value="E{{ sprintf("%06d", mt_rand(1, 9999999)) }}"
+                                            step="1" required>
                                         @if ($errors->has('barcode'))
                                             <span class="text-danger">{{ $errors->first('barcode') }}</span>
                                         @endif
@@ -253,7 +265,7 @@
             $('#customer_invoice_total').val(total);
         }
         function deliveryPrice(){
-            var id = $('#city_id').find(":selected").val();
+            var id = $('#governorate_id').find(":selected").val();
             var isChangable = $('#delivery_price').attr('isChangable');
             if(isChangable == 'true'){
                 $.ajax({
@@ -294,3 +306,4 @@
         $('#status_id'). select2('destroy'). attr("readonly", true)
     </script>
 @endsection
+]

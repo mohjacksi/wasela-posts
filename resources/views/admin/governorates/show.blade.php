@@ -31,6 +31,14 @@
                             {{ $governorate->name }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.city.fields.default_price') }}
+                        </th>
+                        <td>
+                            {{ $governorate->default_price }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

@@ -322,4 +322,5 @@ return [
     'leave'                          => 'مغادرة',
     'calendar'                       => 'التقويم',
     'messenger'                      => 'مراسل',
+    'date'                           => 'التاريخ',
 ];

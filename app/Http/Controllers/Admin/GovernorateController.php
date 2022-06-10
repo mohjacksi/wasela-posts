@@ -49,6 +49,9 @@ class GovernorateController extends Controller
             $table->editColumn('name', function ($row) {
                 return $row->name ? $row->name : '';
             });
+            $table->editColumn('default_price', function ($row) {
+                return $row->default_price ? $row->default_price : '';
+            });
 
             $table->rawColumns(['actions', 'placeholder']);
 

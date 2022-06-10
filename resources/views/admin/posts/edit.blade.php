@@ -115,6 +115,15 @@
                 <span class="help-block">{{ trans('cruds.post.fields.status_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="type">{{ trans('cruds.post.fields.type') }}</label>
+                <input class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}"
+                    type="text" name="type" id="type" value="{{ old('type', $post->type) }}" step="1">
+                @if ($errors->has('type'))
+                    <span class="text-danger">{{ $errors->first('type') }}</span>
+                @endif
+            </div>
+        
+            <div class="form-group">
                 <label for="notes">{{ trans('cruds.post.fields.notes') }}</label>
                 <textarea class="form-control {{ $errors->has('notes') ? 'is-invalid' : '' }}" name="notes" id="notes">{{ old('notes', $post->notes) }}</textarea>
                 @if($errors->has('notes'))

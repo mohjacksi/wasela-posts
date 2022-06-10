@@ -22,6 +22,7 @@ class Governorate extends Model
 
     protected $fillable = [
         'name',
+        'default_price',
         'created_at',
         'updated_at',
         'deleted_at',

@@ -197,8 +197,8 @@ class PostController extends Controller
     
     public function deliveryPrice($id)
     {
-        $city=City::find($id);
-        return $city->default_price;
+        $governorate=Governorate::find($id);
+        return $governorate->default_price;
     }
     
     public function changeCity($id)
