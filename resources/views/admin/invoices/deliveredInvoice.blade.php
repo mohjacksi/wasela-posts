@@ -1,3 +1,4 @@
+@php $posts = $invoice->invoicePosts->where('status_id', 3);  @endphp
 <div class="container">
     <table class="table">
         <tbody>
@@ -21,17 +22,17 @@
                         <h4>{{ trans('cruds.invoice.customer_invoice') }}</h4>
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.invoice.quantity') }} :</h5>
-                        {{ $invoice->invoicePosts ? $invoice->invoicePosts->where('status_id', 3)->count() : '' }}</p>
+                        {{ $posts ? $posts->count() : '' }}</p>
                         {{-- assume the capital id = 1 --}}
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.invoice.capital_quantity') }}
                             :</h5>
-                        {{ $invoice->invoicePosts? $invoice->invoicePosts->where('status_id', 3)->where('governorate_id', 1)->count(): '' }}
+                        {{ $posts? $posts->where('governorate_id', 1)->count(): '' }}
                         </p>
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.invoice.other_quantity') }} :
                         </h5>
-                        {{ $invoice->invoicePosts? $invoice->invoicePosts->where('status_id', 3)->where('governorate_id', '!=', 1)->count(): '' }}
+                        {{ $posts? $posts->where('governorate_id', '!=', 1)->count(): '' }}
                         </p>
                     </td>
                     <td><img src="{{ asset('vendor/invoices/sample-logo.png') }}" alt="logo" height="100"
@@ -57,7 +58,7 @@
         </thead>
         <tbody>
             @php $i=0; @endphp
-            @foreach ($invoice->invoicePosts->where('status_id', 3) as $key => $post)
+            @foreach ($posts as $key => $post)
                 @php $i=$i+1; @endphp
                 <tr>
                     <th scope="row">{{ $i }}</th>

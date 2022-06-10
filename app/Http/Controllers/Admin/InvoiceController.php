@@ -74,7 +74,7 @@ class InvoiceController extends Controller
     {
         abort_if(Gate::denies('invoice_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $customers = CrmCustomer::pluck('email', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $customers = CrmCustomer::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         return view('admin.invoices.create', compact('customers'));
     }

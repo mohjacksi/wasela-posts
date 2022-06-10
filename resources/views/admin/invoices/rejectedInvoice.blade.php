@@ -1,3 +1,4 @@
+@php $posts = $invoice->invoicePosts->where('status_id', 2);  @endphp
 <div class="container">
     <table class="table">
         <tbody>
@@ -19,16 +20,16 @@
                         <h4>{{ trans('cruds.invoice.customer_invoice_rejected') }}</h4>
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.invoice.quantity') }} :</h5>
-                        {{ $invoice->invoicePosts ? $invoice->invoicePosts->where('status_id', 2)->count() : '' }}</p>
+                        {{ $posts ? $posts->count() : '' }}</p>
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.invoice.capital_quantity') }}
                             :</h5>
-                        {{ $invoice->invoicePosts? $invoice->invoicePosts->where('status_id', 2)->where('governorate_id', 1)->count(): '' }}
+                        {{ $posts ? $posts->where('governorate_id', 1)->count(): '' }}
                         </p>
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.invoice.other_quantity') }} :
                         </h5>
-                        {{ $invoice->invoicePosts? $invoice->invoicePosts->where('status_id', 2)->where('governorate_id', '!=', 1)->count(): '' }}
+                        {{ $posts ? $posts->where('governorate_id', '!=', 1)->count(): '' }}
                         </p>
                     </td>
                     <td><img src="{{ asset('vendor/invoices/sample-logo.png') }}" alt="logo" height="100"
@@ -57,7 +58,7 @@
                 $total_rejected = 0;
                 $i = 0;
             @endphp
-            @foreach ($invoice->invoicePosts->where('status_id', 2) as $key => $post)
+            @foreach ($posts as $key => $post)
                 @php
                     $total_rejected = $total_rejected + $post->sender_total;
                     $i = $i + 1;
