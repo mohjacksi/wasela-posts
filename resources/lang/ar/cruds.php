@@ -220,6 +220,7 @@ return [
     'post' => [
         'title'          => 'الطرود',
         'title_singular' => 'الطرود',
+        'print' => 'طباعة الطرد',
         'fields'         => [
             'id'                            => 'ID',
             'id_helper'                     => ' ',

@@ -26,7 +26,7 @@
                 </a>
 
                 <a class="btn btn-info" href="#" onclick="printPost()">
-                    {{ trans('cruds.invoice.print') }}
+                    {{ trans('cruds.post.print') }}
                 </a>
             </div>
             <div id="print_post">
