@@ -9,7 +9,9 @@ use App\Http\Requests\UpdateInvoiceRequest;
 use App\Models\CrmCustomer;
 use App\Models\Invoice;
 use App\Models\Post;
+use App\Models\PostStatus;
 use Gate;
+use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
@@ -25,7 +27,7 @@ class InvoiceController extends Controller
         abort_if(Gate::denies('invoice_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Invoice::with(['customer'])->select(sprintf('%s.*', (new Invoice())->table));
+            $query = Invoice::with(['customer','status'])->select(sprintf('%s.*', (new Invoice())->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -59,6 +61,9 @@ class InvoiceController extends Controller
             $table->editColumn('amount', function ($row) {
                 return $row->amount ? $row->amount : '';
             });
+            $table->editColumn('status_name', function ($row) {
+                return $row->status ? $row->status->name : '';
+            });
 
             $table->rawColumns(['actions', 'placeholder', 'customer']);
 
@@ -66,8 +71,9 @@ class InvoiceController extends Controller
         }
 
         $crm_customers = CrmCustomer::get();
+        $status = PostStatus::get();
 
-        return view('admin.invoices.index', compact('crm_customers'));
+        return view('admin.invoices.index', compact('crm_customers','status'));
     }
 
     public function create()
@@ -86,7 +92,7 @@ class InvoiceController extends Controller
         $posts= Post::where([
             ['sender_id','=',$invoice->customer->id],
             ['invoice_id', '=', null],
-            // ['status_id', '=', 3], // where status_id == 3 (delivered)
+            ['status_id', '=', $invoice->status_id], // where status_id == 3 (delivered)
         ])->get();
         if(!$posts->isEmpty()){
             foreach($posts as $post){
@@ -174,25 +180,36 @@ class InvoiceController extends Controller
 
     }
 
-    public function getBalance($id)
+    public function getBalance(Request $request)
     {
         abort_if(Gate::denies('invoice_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
+// dd($request->all());
         $balance=0;
-        $posts= Post::where([
-            ['sender_id','=',$id],
+        $posts= Post::with(['governorate', 'city',])->where([
+            ['sender_id','=',$request->all()['id']],
             ['invoice_id', '=', null],
-            ['status_id', '=', 3], // where status_id == 3 (delivered)
+            ['status_id', '=', $request->all()['status_id']], // where status_id == 3 (delivered)
         ])->get();
         if(!$posts->isEmpty()){
             foreach($posts as $post){
                 $balance = $balance + $post->sender_total;
             }
         }
-
-        $newInvoice=$this->createInvoice($id, null ,'arabicInvoice');
+        $id=DB::select("SHOW TABLE STATUS LIKE 'invoices'");
+        $next_id=$id[0]->Auto_increment;
+        $customer = CrmCustomer::find($request->all()['id']);
+        $invoice=(object)array(
+            'id'=>$next_id,
+            'customer'=>$customer,
+            'created_at'=>null,
+            'amount'=>$balance,
+        );
         $data[0]= $balance;
-        $data[1]= $newInvoice->toHtml()->render();
+        if($request->all()['status_id'] == 3){
+            $data[1]= view('admin.invoices.deliveredInvoice', compact('posts','invoice'))->render();
+        }elseif($request->all()['status_id'] == 2){
+            $data[1]= view('admin.invoices.rejectedInvoice', compact('posts','invoice'))->render();
+        }
 
         return $data; 
     }

@@ -31,6 +31,9 @@
                         {{ trans('cruds.crmCustomer.fields.name') }}
                     </th>
                     <th>
+                        {{ trans('cruds.invoice.status') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.invoice.fields.amount') }}
                     </th>
                     <th>
@@ -58,6 +61,14 @@
                         </select>
                     </td>
                     <td>
+                    </td>
+                    <td>
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($status as $key => $item)
+                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
@@ -126,6 +137,7 @@
 { data: 'id', name: 'id' },
 { data: 'customer_email', name: 'customer.email' },
 { data: 'customer.name', name: 'customer.name' },
+{ data: 'status_name', name: 'status.name' },
 { data: 'amount', name: 'amount' },
 { data: 'created_at', name: 'created_at' },
 { data: 'updated_at', name: 'updated_at' },

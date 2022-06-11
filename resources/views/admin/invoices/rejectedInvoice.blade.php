@@ -1,4 +1,8 @@
-@php $posts = $invoice->invoicePosts->where('status_id', 2);  @endphp
+@php
+if(!isset($posts)){
+ $posts = $invoice->invoicePosts->where('status_id', 2);
+}
+@endphp
 <div class="container">
     <table class="table">
         <tbody>
@@ -7,14 +11,16 @@
                     <td style="width: 26%;">
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.crmCustomer.fields.name2') }} :
-                        </h5> {{ $invoice->customer->name ?? '' }}</p>
+                        </h5> {{ $invoice->customer ? $invoice->customer->name : '' }}</p>
                         <p>
                         <h5 style="display: inline-block;">{{ trans('global.date') }} :</h5>
-                        {{ $invoice->created_at->toDateString() ?? '' }}</p>
+                        {{ $invoice->created_at ? $invoice->created_at->toDateString() : date('Y-m-d') }}</p>
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.invoice.invoice_number') }} :
                         </h5> {{ $invoice->id ?? '' }}</p>
-
+                        <p>
+                        <h5 style="display: inline-block;">{{ trans('cruds.invoice.total_rejected') }}
+                            :</h5> {{ $invoice->amount ?? '' }}</p>
                     </td>
                     <td>
                         <h4>{{ trans('cruds.invoice.customer_invoice_rejected') }}</h4>
@@ -54,15 +60,9 @@
             </tr>
         </thead>
         <tbody>
-            @php
-                $total_rejected = 0;
-                $i = 0;
-            @endphp
+            @php $i = 0; @endphp
             @foreach ($posts as $key => $post)
-                @php
-                    $total_rejected = $total_rejected + $post->sender_total;
-                    $i = $i + 1;
-                @endphp
+                @php $i = $i + 1; @endphp
                 <tr>
                     <th scope="row">{{ $i }}</th>
                     <td>{{ $post->created_at->toDateString() ?? '' }}</td>
@@ -80,7 +80,7 @@
                 <th colspan="5" style="text-align:center;">
                     <h5>{{ trans('cruds.invoice.total_rejected') }} :</h5>
                 </th>
-                <th colspan="4" style="text-align:center;">{{ $total_rejected ?? '' }}</th>
+                <th colspan="4" style="text-align:center;">{{ $invoice->amount ?? '' }}</th>
             </tr>
         </tbody>
     </table>

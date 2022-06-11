@@ -70,7 +70,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Invoice
     Route::get('invoices/newCreate/{invoice}', 'InvoiceController@newCreate')->name('invoices.newCreate');
-    Route::get('invoices/getBalance/{id?}', 'InvoiceController@getBalance')->name('invoices.getBalance');
+    Route::post('invoices/getBalance', 'InvoiceController@getBalance')->name('invoices.getBalance');
     Route::delete('invoices/destroy', 'InvoiceController@massDestroy')->name('invoices.massDestroy');
     Route::resource('invoices', 'InvoiceController');
 

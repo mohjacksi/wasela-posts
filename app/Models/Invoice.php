@@ -25,6 +25,7 @@ class Invoice extends Model
     protected $fillable = [
         'customer_id',
         'amount',
+        'status_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -38,6 +39,11 @@ class Invoice extends Model
     public function customer()
     {
         return $this->belongsTo(CrmCustomer::class, 'customer_id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(PostStatus::class, 'status_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)

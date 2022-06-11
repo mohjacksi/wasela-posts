@@ -1,4 +1,8 @@
-@php $posts = $invoice->invoicePosts->where('status_id', 3);  @endphp
+@php
+if(!isset($posts)){
+ $posts = $invoice->invoicePosts->where('status_id', 3);
+}
+ @endphp
 <div class="container">
     <table class="table">
         <tbody>
@@ -7,10 +11,10 @@
                     <td style="width: 26%;">
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.crmCustomer.fields.name2') }} :
-                        </h5> {{ $invoice->customer->name ?? '' }}</p>
+                        </h5> {{ $invoice->customer ? $invoice->customer->name : '' }}</p>
                         <p>
                         <h5 style="display: inline-block;">{{ trans('global.date') }} :</h5>
-                        {{ $invoice->created_at->toDateString() ?? '' }}</p>
+                        {{ $invoice->created_at ? $invoice->created_at->toDateString() : date('Y-m-d') }}</p>
                         <p>
                         <h5 style="display: inline-block;">{{ trans('cruds.invoice.invoice_number') }} :
                         </h5> {{ $invoice->id ?? '' }}</p>

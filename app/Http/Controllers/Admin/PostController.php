@@ -130,7 +130,9 @@ class PostController extends Controller
     {
         $post = Post::create($request->all());
 
-        return redirect()->route('admin.posts.index');
+        $post->load('sender', 'governorate', 'city', 'status', 'invoice');
+
+        return view('admin.posts.show', compact('post'));
     }
 
     public function edit(Post $post)

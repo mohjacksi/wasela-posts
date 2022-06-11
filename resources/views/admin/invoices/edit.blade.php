@@ -22,6 +22,14 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.invoice.fields.customer_helper') }}</span>
             </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="status_id" id="exampleRadios1" value="3" @if($invoice->status_id == 3) checked @endif>
+                <label class="form-check-label" for="exampleRadios1">{{ trans('cruds.post.fields.delivered') }}</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="status_id" id="exampleRadios2" value="2" @if($invoice->status_id == 2) checked @endif>
+                <label class="form-check-label" for="exampleRadios2">{{ trans('cruds.post.fields.rejected') }}</label>
+            </div>
             <div class="form-group">
                 <label class="required" for="amount">{{ trans('cruds.invoice.fields.amount') }}</label>
                 <input class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" type="number" name="amount" id="amount" value="{{ old('amount', $invoice->amount) }}" step="0.01" required>

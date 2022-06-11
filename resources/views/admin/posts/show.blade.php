@@ -1,6 +1,18 @@
 @extends('layouts.admin')
 @section('content')
 
+@section('styles')
+<style>
+
+    @media print{
+        @page {
+            size: a5 landscape;
+            margin: 0;
+        }
+    }
+</style>
+@endsection
+
 <div class="card">
     <div class="card-header">
         {{ trans('global.show') }} {{ trans('cruds.post.title') }}
@@ -12,123 +24,101 @@
                 <a class="btn btn-default" href="{{ route('admin.posts.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
+
+                <a class="btn btn-info" href="#" onclick="printPost()">
+                    {{ trans('cruds.invoice.print') }}
+                </a>
             </div>
-            <table class="table table-bordered table-striped">
+            <div id="print_post">
+            <table class="table">
                 <tbody>
                     <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.id') }}
+                        <th colspan="2" style="text-align: center;">
+                            <img src="{{ asset('vendor/invoices/sample-logo.png') }}" alt="logo" height="100"
+                            style="height: 4rem;">
                         </th>
-                        <td>
-                            {{ $post->id }}
-                        </td>
+                    </tr>
+                    <tr style="border-bottom: 3px solid #000;">
+                        <th>
+                            <br><br>
+                            <p>
+                                <h5 style="display: inline-block;">{{ trans('global.date') }} :</h5>
+                                {{ $post->created_at ? $post->created_at->toDateString() : date('Y-m-d') }}</p>
+                        </th>
+                        <th>
+                            <p><h5 style="display: inline-block;">info@wasela-iq.com</h5></p>
+                            <p><h5 style="display: inline-block;">07700096622</h5></p>
+                            <p style="display: inline-block"> <h5 style="display: inline-block;">{{ $post->id }}.No</h5></p> 
+
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.sender') }} :</h5>
+                                {{ $post->sender->name ?? '' }}</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.sender_phone_number') }} :</h5>
+                                {{ $post->sender->phone ?? '' }}</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.receiver_name') }} :</h5>
+                                {{ $post->receiver_name ?? '' }}</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.receiver_phone_number') }} :</h5>
+                                {{ $post->receiver_phone_number ?? '' }}</p>
+                        </th>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.post.fields.barcode') }}
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.governorate') }} :</h5>
+                                {{ $post->governorate->name ?? '' }}</p>
                         </th>
-                        <td>
-                            {{ $post->barcode }}
-                        </td>
+                        <th style="text-align: right;">
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.city') }} :</h5>
+                                {{ $post->city->name ?? '' }}</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.sender_total') }} :</h5>
+                                {{ $post->sender_total ?? '' }}</p>
+                        </th>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.post.fields.sender') }}
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.type') }} :</h5>
+                                {{ $post->type ?? '' }}</p>
                         </th>
-                        <td>
-                            {{ $post->sender->name ?? '' }}
-                        </td>
+                        <th style="text-align: right;">
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.quantity') }} :</h5>
+                                {{ $post->quantity ?? '' }}</p>
+                        </th>
+                    </tr>
+                    <tr style="border-bottom: 3px solid #000;">
+                        <th colspan="2">
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.notes') }} :</h5>
+                                {{ $post->notes ?? '' }}</p>
+                        </th>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.post.fields.receiver_name') }}
+                            <p><h5 style="display: inline-block;">نفق الشرطة, الشارع الخدمى , بجانب بسكولاتة.</h5></p>
                         </th>
-                        <td>
-                            {{ $post->receiver_name }}
-                        </td>
-                    </tr>
-                    <tr>
                         <th>
-                            {{ trans('cruds.post.fields.receiver_phone_number') }}
+                            <p><h5 style="display: inline-block;">www.wasela-iq.com</h5></p>
                         </th>
-                        <td>
-                            {{ $post->receiver_phone_number }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.governorate') }}
-                        </th>
-                        <td>
-                            {{ $post->governorate->name ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.city') }}
-                        </th>
-                        <td>
-                            {{ $post->city->name ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.delivery_address') }}
-                        </th>
-                        <td>
-                            {{ $post->delivery_address }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.sender_total') }}
-                        </th>
-                        <td>
-                            {{ $post->sender_total }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.delivery_price') }}
-                        </th>
-                        <td>
-                            {{ $post->delivery_price }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.customer_invoice_total') }}
-                        </th>
-                        <td>
-                            {{ $post->customer_invoice_total }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.status') }}
-                        </th>
-                        <td>
-                            {{ $post->status->name ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.notes') }}
-                        </th>
-                        <td>
-                            {{ $post->notes }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.post.fields.invoice') }}
-                        </th>
-                        <td>
-                            {{ $post->invoice->amount ?? '' }}
-                        </td>
                     </tr>
                 </tbody>
             </table>
+            </div>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.posts.index') }}">
                     {{ trans('global.back_to_list') }}
@@ -138,6 +128,19 @@
     </div>
 </div>
 
+<script>
+    function printPost() {
+        var printContents = document.getElementById("print_post").innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+
+    }
+</script>
 
 
 @endsection

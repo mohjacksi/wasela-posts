@@ -70,6 +70,7 @@
                                         <input
                                             class="form-control {{ $errors->has('customer_invoice_total') ? 'is-invalid' : '' }}"
                                             type="number" name="customer_invoice_total" id="customer_invoice_total"
+                                            onchange="new_price()"
                                             value="{{ old('customer_invoice_total', '') }}" step="0.01" required>
                                         @if ($errors->has('customer_invoice_total'))
                                             <span
@@ -260,6 +261,10 @@
     </div>
 
     <script>
+        function new_price(){
+            var price = Number($('#customer_invoice_total').val()) - Number($('#delivery_price').val());
+            $('#sender_total').val(price);
+        }
         function totalPrice(){
             var total = Number($('#sender_total').val()) + Number($('#delivery_price').val());
             $('#customer_invoice_total').val(total);
