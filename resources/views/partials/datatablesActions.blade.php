@@ -19,13 +19,7 @@
         {{ trans('global.view') }}
     </a>
 @endcan
-@if (isset($statusGate) && $row->invoice_id == null)
-@can($editGate)
-    <a class="btn btn-xs btn-info" href="{{ route('admin.' . $crudRoutePart . '.edit', $row->id) }}">
-        {{ trans('global.edit') }}
-    </a>
-@endcan
-@elseif($editGate == "governorate_edit" || $editGate == "city_edit")
+@if (!isset($statusGate) && $row->invoice_id == null)
 @can($editGate)
     <a class="btn btn-xs btn-info" href="{{ route('admin.' . $crudRoutePart . '.edit', $row->id) }}">
         {{ trans('global.edit') }}

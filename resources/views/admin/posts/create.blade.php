@@ -38,7 +38,7 @@
                                         <input
                                             class="form-control {{ $errors->has('sender_total') ? 'is-invalid' : '' }}"
                                             type="number" name="sender_total" id="sender_total"
-                                            onchange="totalPrice()"
+                                            onchange="new_price()"
                                             value="{{ old('sender_total', '') }}"   required>
                                         @if ($errors->has('sender_total'))
                                             <span class="text-danger">{{ $errors->first('sender_total') }}</span>
@@ -53,8 +53,8 @@
                                             for="delivery_price">{{ trans('cruds.post.fields.delivery_price') }}</label>
                                         <input
                                             class="form-control {{ $errors->has('delivery_price') ? 'is-invalid' : '' }}"
-                                            type="number" name="delivery_price" id="delivery_price" isChangable="true"
-                                            onchange="totalPrice(); $('#delivery_price').attr('isChangable','false');"
+                                            type="number" name="delivery_price" id="delivery_price" 
+                                            {{-- isChangable="true" onchange="totalPrice(); $('#delivery_price').attr('isChangable','false');" --}}
                                             value="{{ old('delivery_price', '') }}"   required>
                                         @if ($errors->has('delivery_price'))
                                             <span class="text-danger">{{ $errors->first('delivery_price') }}</span>
@@ -265,21 +265,21 @@
             var price = Number($('#customer_invoice_total').val()) - Number($('#delivery_price').val());
             $('#sender_total').val(price);
         }
-        function totalPrice(){
-            var total = Number($('#sender_total').val()) + Number($('#delivery_price').val());
-            $('#customer_invoice_total').val(total);
-        }
+        // function totalPrice(){
+        //     var total = Number($('#sender_total').val()) + Number($('#delivery_price').val());
+        //     $('#customer_invoice_total').val(total);
+        // }
         function deliveryPrice(){
             var id = $('#governorate_id').find(":selected").val();
-            var isChangable = $('#delivery_price').attr('isChangable');
-            if(isChangable == 'true'){
+            // var isChangable = $('#delivery_price').attr('isChangable');
+            if(id > 0){
                 $.ajax({
                 method: 'GET',
                 url: "{{ route('admin.post.deliveryPrice') }}" + '/' + id,
                 success: function(data) {
                     if(data){
                         $('#delivery_price').val(data);
-                        totalPrice();
+                        new_price();
                     }
 
                 }
