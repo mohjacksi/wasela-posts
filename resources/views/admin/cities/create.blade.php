@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label for="default_price">{{ trans('cruds.city.fields.default_price') }}</label>
-                <input class="form-control {{ $errors->has('default_price') ? 'is-invalid' : '' }}" type="number" name="default_price" id="default_price" value="{{ old('default_price', '') }}" step="0.01">
+                <input class="form-control {{ $errors->has('default_price') ? 'is-invalid' : '' }}" type="number" name="default_price" id="default_price" value="{{ old('default_price', '') }}"  >
                 @if($errors->has('default_price'))
                     <span class="text-danger">{{ $errors->first('default_price') }}</span>
                 @endif

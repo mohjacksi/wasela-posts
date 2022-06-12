@@ -32,7 +32,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="amount">{{ trans('cruds.invoice.fields.amount') }}</label>
-                <input class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" type="number" name="amount" id="amount" value="{{ old('amount', $invoice->amount) }}" step="0.01" required>
+                <input class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" type="number" name="amount" id="amount" value="{{ old('amount', $invoice->amount) }}"   required>
                 @if($errors->has('amount'))
                     <span class="text-danger">{{ $errors->first('amount') }}</span>
                 @endif

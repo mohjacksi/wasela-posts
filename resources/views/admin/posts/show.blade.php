@@ -6,7 +6,7 @@
 
     @media print{
         @page {
-            size: a5 landscape;
+            size: a5 portrait;
             margin: 0;
         }
     }

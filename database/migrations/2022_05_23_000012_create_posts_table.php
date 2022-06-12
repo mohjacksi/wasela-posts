@@ -14,9 +14,9 @@ class CreatePostsTable extends Migration
             $table->string('receiver_name')->nullable();
             $table->string('receiver_phone_number');
             $table->string('delivery_address');
-            $table->decimal('sender_total', 15, 2);
-            $table->decimal('delivery_price', 15, 2);
-            $table->decimal('customer_invoice_total', 15, 2);
+            $table->decimal('sender_total' , 15);
+            $table->decimal('delivery_price' , 15);
+            $table->decimal('customer_invoice_total' , 15);
             $table->longText('notes')->nullable();
             $table->string('type')->nullable();
             $table->timestamps();

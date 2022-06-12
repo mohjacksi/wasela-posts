@@ -12,7 +12,7 @@ class AddRelationshipFieldsToInvoicesTable extends Migration
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->foreign('customer_id', 'customer_fk_6634848')->references('id')->on('crm_customers');
             $table->unsignedBigInteger('status_id')->nullable();
-            $table->foreign('status_id', 'status_fk_6635160')->references('id')->on('post_statuses');
+            $table->foreign('status_id', 'status_fk_6634848')->references('id')->on('post_statuses');
         });
     }
 }

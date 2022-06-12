@@ -11,7 +11,7 @@ class CreateCitiesTable extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->decimal('default_price', 15, 2)->nullable();
+            $table->decimal('default_price' , 15)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

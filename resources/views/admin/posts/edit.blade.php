@@ -80,7 +80,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="sender_total">{{ trans('cruds.post.fields.sender_total') }}</label>
-                <input class="form-control {{ $errors->has('sender_total') ? 'is-invalid' : '' }}" type="number" name="sender_total" id="sender_total" value="{{ old('sender_total', $post->sender_total) }}" step="0.01" required>
+                <input class="form-control {{ $errors->has('sender_total') ? 'is-invalid' : '' }}" type="number" name="sender_total" id="sender_total" value="{{ old('sender_total', $post->sender_total) }}"   required>
                 @if($errors->has('sender_total'))
                     <span class="text-danger">{{ $errors->first('sender_total') }}</span>
                 @endif
@@ -88,7 +88,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="delivery_price">{{ trans('cruds.post.fields.delivery_price') }}</label>
-                <input class="form-control {{ $errors->has('delivery_price') ? 'is-invalid' : '' }}" type="number" name="delivery_price" id="delivery_price" value="{{ old('delivery_price', $post->delivery_price) }}" step="0.01" required>
+                <input class="form-control {{ $errors->has('delivery_price') ? 'is-invalid' : '' }}" type="number" name="delivery_price" id="delivery_price" value="{{ old('delivery_price', $post->delivery_price) }}"   required>
                 @if($errors->has('delivery_price'))
                     <span class="text-danger">{{ $errors->first('delivery_price') }}</span>
                 @endif
@@ -96,7 +96,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="customer_invoice_total">{{ trans('cruds.post.fields.customer_invoice_total') }}</label>
-                <input class="form-control {{ $errors->has('customer_invoice_total') ? 'is-invalid' : '' }}" type="number" name="customer_invoice_total" id="customer_invoice_total" value="{{ old('customer_invoice_total', $post->customer_invoice_total) }}" step="0.01" required>
+                <input class="form-control {{ $errors->has('customer_invoice_total') ? 'is-invalid' : '' }}" type="number" name="customer_invoice_total" id="customer_invoice_total" value="{{ old('customer_invoice_total', $post->customer_invoice_total) }}"   required>
                 @if($errors->has('customer_invoice_total'))
                     <span class="text-danger">{{ $errors->first('customer_invoice_total') }}</span>
                 @endif
