@@ -19,13 +19,11 @@
         {{ trans('global.view') }}
     </a>
 @endcan
-@if (!isset($statusGate) && $row->invoice_id == null)
 @can($editGate)
     <a class="btn btn-xs btn-info" href="{{ route('admin.' . $crudRoutePart . '.edit', $row->id) }}">
         {{ trans('global.edit') }}
     </a>
 @endcan
-@endif
 @can($deleteGate)
     @if ($row->invoice_id == null)
         <form action="{{ route('admin.' . $crudRoutePart . '.destroy', $row->id) }}" method="POST"

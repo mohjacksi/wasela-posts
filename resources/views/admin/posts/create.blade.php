@@ -146,9 +146,7 @@
                                         <select
                                             class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}"
                                             name="city_id" id="city_id">
-                                                <option value="0"
-                                                    {{ old('city_id') == $id ? 'selected' : '' }} hidden>
-                                                    </option>
+                                                <option value {{ old('city_id') == $id ? 'selected' : '' }}>الرجاء الإختيار</option>
                                         </select>
                                         @if ($errors->has('city'))
                                             <span class="text-danger">{{ $errors->first('city') }}</span>
@@ -184,13 +182,23 @@
                             <div class="card-body">
 
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="form-group col-lg-6">
                                         <div class="form-group">
                                             <label for="type">{{ trans('cruds.post.fields.type') }}</label>
                                             <input class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}"
                                                 type="text" name="type" id="type" step="1">
                                             @if ($errors->has('type'))
                                                 <span class="text-danger">{{ $errors->first('type') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <div class="form-group">
+                                            <label for="quantity">{{ trans('cruds.post.fields.quantity') }}</label>
+                                            <input class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}"
+                                                type="number" name="quantity" id="quantity" step="1">
+                                            @if ($errors->has('quantity'))
+                                                <span class="text-danger">{{ $errors->first('quantity') }}</span>
                                             @endif
                                         </div>
                                     </div>
@@ -296,7 +304,7 @@
             url: "{{ route('admin.post.changeCity') }}" + '/' + id,
             success: function (data) {
             city.empty();
-            city.append('<option>الرجاء الإختيار</option>');
+            city.append('<option value>الرجاء الإختيار</option>');
             for (var i = 0; i < data.length; i++) {
                 city.append('<option value=' + data[i].id + '>' + data[i].name + '</option>');
             };
@@ -304,7 +312,7 @@
             })
             }else{
                 city.empty();
-                city.append('<option>الرجاء الإختيار</option>');
+                city.append('<option value>الرجاء الإختيار</option>');
             }
         }
 

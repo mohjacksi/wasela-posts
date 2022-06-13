@@ -1,5 +1,16 @@
 <?php
 
+
+Route::get('/clear', function() {
+
+    Artisan::call('view:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+
+    dd("done");
+});
+
 Route::redirect('/', '/login');
 Route::get('/home', function () {
     if (session('status')) {

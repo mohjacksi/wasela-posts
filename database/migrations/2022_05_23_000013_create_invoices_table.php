@@ -10,7 +10,7 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->decimal('amount' , 15);
+            $table->decimal('amount'  , 15, 0);
             $table->timestamps();
             $table->softDeletes();
         });

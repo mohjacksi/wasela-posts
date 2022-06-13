@@ -48,7 +48,7 @@
             </div>
             <div class="form-group">
                 <label for="governorate_id">{{ trans('cruds.post.fields.governorate') }}</label>
-                <select class="form-control select2 {{ $errors->has('governorate') ? 'is-invalid' : '' }}" name="governorate_id" id="governorate_id">
+                <select class="form-control select2 {{ $errors->has('governorate') ? 'is-invalid' : '' }}" name="governorate_id" id="governorate_id" onchange="changeCity(); deliveryPrice()">
                     @foreach($governorates as $id => $entry)
                         <option value="{{ $id }}" {{ (old('governorate_id') ? old('governorate_id') : $post->governorate->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
@@ -60,12 +60,13 @@
             </div>
             <div class="form-group">
                 <label for="city_id">{{ trans('cruds.post.fields.city') }}</label>
-                <select class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}" name="city_id" id="city_id">
-                    @foreach($cities as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('city_id') ? old('city_id') : $post->city->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
+                <select
+                    class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}"
+                    name="city_id" id="city_id">
+                    <option value="{{ $post->city ? $post->city->id : '' }}">
+                        {{ $post->city ? $post->city->name : 'الرجاء الإختيار' }}</option>
                 </select>
-                @if($errors->has('city'))
+                @if ($errors->has('city'))
                     <span class="text-danger">{{ $errors->first('city') }}</span>
                 @endif
                 <span class="help-block">{{ trans('cruds.post.fields.city_helper') }}</span>
@@ -80,7 +81,8 @@
             </div>
             <div class="form-group">
                 <label class="required" for="sender_total">{{ trans('cruds.post.fields.sender_total') }}</label>
-                <input class="form-control {{ $errors->has('sender_total') ? 'is-invalid' : '' }}" type="number" name="sender_total" id="sender_total" value="{{ old('sender_total', $post->sender_total) }}"   required>
+                <input class="form-control {{ $errors->has('sender_total') ? 'is-invalid' : '' }}" type="number" name="sender_total" id="sender_total" 
+                onchange="new_price()" value="{{ old('sender_total', $post->sender_total) }}"   required>
                 @if($errors->has('sender_total'))
                     <span class="text-danger">{{ $errors->first('sender_total') }}</span>
                 @endif
@@ -96,7 +98,8 @@
             </div>
             <div class="form-group">
                 <label class="required" for="customer_invoice_total">{{ trans('cruds.post.fields.customer_invoice_total') }}</label>
-                <input class="form-control {{ $errors->has('customer_invoice_total') ? 'is-invalid' : '' }}" type="number" name="customer_invoice_total" id="customer_invoice_total" value="{{ old('customer_invoice_total', $post->customer_invoice_total) }}"   required>
+                <input class="form-control {{ $errors->has('customer_invoice_total') ? 'is-invalid' : '' }}" type="number" name="customer_invoice_total" id="customer_invoice_total" 
+                onchange="new_price()" value="{{ old('customer_invoice_total', $post->customer_invoice_total) }}"   required>
                 @if($errors->has('customer_invoice_total'))
                     <span class="text-danger">{{ $errors->first('customer_invoice_total') }}</span>
                 @endif
@@ -117,9 +120,17 @@
             <div class="form-group">
                 <label for="type">{{ trans('cruds.post.fields.type') }}</label>
                 <input class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}"
-                    type="text" name="type" id="type" value="{{ old('type', $post->type) }}" step="1">
+                    type="text" name="type" id="type" value="{{ old('type', $post->type) }}">
                 @if ($errors->has('type'))
                     <span class="text-danger">{{ $errors->first('type') }}</span>
+                @endif
+            </div>
+            <div class="form-group">
+                <label for="quantity">{{ trans('cruds.post.fields.quantity') }}</label>
+                <input class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}"
+                    type="number" name="quantity" id="quantity" value="{{ old('quantity', $post->quantity) }}">
+                @if ($errors->has('quantity'))
+                    <span class="text-danger">{{ $errors->first('quantity') }}</span>
                 @endif
             </div>
         
@@ -141,5 +152,49 @@
 </div>
 
 
+<script>
+    function new_price(){
+        var price = Number($('#customer_invoice_total').val()) - Number($('#delivery_price').val());
+        $('#sender_total').val(price);
+    }
+    function deliveryPrice(){
+        var id = $('#governorate_id').find(":selected").val();
+        if(id > 0){
+            $.ajax({
+            method: 'GET',
+            url: "{{ route('admin.post.deliveryPrice') }}" + '/' + id,
+            success: function(data) {
+                if(data){
+                    $('#delivery_price').val(data);
+                    new_price();
+                }
+
+            }
+            })
+        }
+    }
+
+    function changeCity(){
+        var id = $('#governorate_id').find(":selected").val();
+        var city=$('#city_id');
+        if(id != ''){
+        $.ajax({
+        method: 'GET',
+        url: "{{ route('admin.post.changeCity') }}" + '/' + id,
+        success: function (data) {
+        city.empty();
+        city.append('<option value>الرجاء الإختيار</option>');
+        for (var i = 0; i < data.length; i++) {
+            city.append('<option value=' + data[i].id + '>' + data[i].name + '</option>');
+        };
+        }
+        })
+        }else{
+            city.empty();
+            city.append('<option value>الرجاء الإختيار</option>');
+        }
+    }
+
+</script>
 
 @endsection

@@ -32,6 +32,7 @@ class Post extends Model
         'delivery_address',
         'sender_total',
         'type',
+        'quantity',
         'delivery_price',
         'customer_invoice_total',
         'status_id',
