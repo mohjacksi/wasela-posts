@@ -183,7 +183,6 @@ class InvoiceController extends Controller
     public function getBalance(Request $request)
     {
         abort_if(Gate::denies('invoice_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-// dd($request->all());
         $balance=0;
         $posts= Post::with(['governorate', 'city',])->where([
             ['sender_id','=',$request->all()['id']],

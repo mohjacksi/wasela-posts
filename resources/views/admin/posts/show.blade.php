@@ -41,9 +41,11 @@
                     <tr style="border-bottom: 3px solid #000;">
                         <th>
                             <br><br>
-                            <p>
-                                <h5 style="display: inline-block;">{{ trans('global.date') }} :</h5>
+                            <p><h5 style="display: inline-block;">{{ trans('global.date') }} :</h5>
                                 {{ $post->created_at ? $post->created_at->toDateString() : date('Y-m-d') }}</p>
+
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.invoice') }} :</h5>
+                                {{ $post->invoice ? $post->invoice->amount : '' }}</p>
                         </th>
                         <th>
                             <p><h5 style="display: inline-block;">info@wasela-iq.com</h5></p>
@@ -87,9 +89,13 @@
                         </th>
                     </tr>
                     <tr>
-                        <th colspan="2">
+                        <th>
                             <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.sender_total') }} :</h5>
                                 {{ $post->sender_total ?? '' }}</p>
+                        </th>
+                        <th style="text-align: right;">
+                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.delivery_address') }} :</h5>
+                                {{ $post->address ?? '' }}</p>
                         </th>
                     </tr>
                     <tr>
