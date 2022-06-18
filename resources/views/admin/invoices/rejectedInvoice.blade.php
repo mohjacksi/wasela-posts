@@ -73,7 +73,7 @@ if(!isset($posts)){
                     <td>{{ $post->customer_invoice_total ?? '' }}</td>
                     <td>{{ $post->delivery_price ?? '' }}</td>
                     <td>{{ $post->sender_total ?? '' }}</td>
-                    <td>{{ $post->type ?? '' }}</td>
+                    <td>{{ $post->notes ?? '' }}</td>
                 </tr>
             @endforeach
             <tr style="background-color: #fff; text-align:center;">

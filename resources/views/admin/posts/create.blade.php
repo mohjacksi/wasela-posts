@@ -37,9 +37,8 @@
                                             for="sender_total">{{ trans('cruds.post.fields.sender_total') }}</label>
                                         <input
                                             class="form-control {{ $errors->has('sender_total') ? 'is-invalid' : '' }}"
-                                            type="number" name="sender_total" id="sender_total"
-                                            onchange="new_price()"
-                                            value="{{ old('sender_total', '') }}"   required>
+                                            type="number" name="sender_total" id="sender_total" onchange="new_price()"
+                                            value="{{ old('sender_total', '') }}" required>
                                         @if ($errors->has('sender_total'))
                                             <span class="text-danger">{{ $errors->first('sender_total') }}</span>
                                         @endif
@@ -53,9 +52,8 @@
                                             for="delivery_price">{{ trans('cruds.post.fields.delivery_price') }}</label>
                                         <input
                                             class="form-control {{ $errors->has('delivery_price') ? 'is-invalid' : '' }}"
-                                            type="number" name="delivery_price" id="delivery_price" 
-                                            {{-- isChangable="true" onchange="totalPrice(); $('#delivery_price').attr('isChangable','false');" --}}
-                                            value="{{ old('delivery_price', '') }}"   required>
+                                            type="number" name="delivery_price" id="delivery_price" onchange="new_price()" {{-- isChangable="true" $('#delivery_price').attr('isChangable','false');" --}}
+                                            value="{{ old('delivery_price', '') }}" required>
                                         @if ($errors->has('delivery_price'))
                                             <span class="text-danger">{{ $errors->first('delivery_price') }}</span>
                                         @endif
@@ -70,8 +68,8 @@
                                         <input
                                             class="form-control {{ $errors->has('customer_invoice_total') ? 'is-invalid' : '' }}"
                                             type="number" name="customer_invoice_total" id="customer_invoice_total"
-                                            onchange="new_price()"
-                                            value="{{ old('customer_invoice_total', '') }}"   required>
+                                            onchange="new_price()" value="{{ old('customer_invoice_total', '') }}"
+                                            required>
                                         @if ($errors->has('customer_invoice_total'))
                                             <span
                                                 class="text-danger">{{ $errors->first('customer_invoice_total') }}</span>
@@ -127,7 +125,8 @@
                                         <label for="governorate_id">{{ trans('cruds.post.fields.governorate') }}</label>
                                         <select
                                             class="form-control select2 {{ $errors->has('governorate') ? 'is-invalid' : '' }}"
-                                            name="governorate_id" id="governorate_id" onchange="changeCity(); deliveryPrice()">
+                                            name="governorate_id" id="governorate_id"
+                                            onchange="changeCity(); deliveryPrice()">
                                             @foreach ($governorates as $id => $entry)
                                                 <option value="{{ $id }}"
                                                     {{ old('governorate_id') == $id ? 'selected' : '' }}>
@@ -146,7 +145,8 @@
                                         <select
                                             class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}"
                                             name="city_id" id="city_id">
-                                                <option value {{ old('city_id') == $id ? 'selected' : '' }}>الرجاء الإختيار</option>
+                                            <option value {{ old('city_id') == $id ? 'selected' : '' }}>الرجاء الإختيار
+                                            </option>
                                         </select>
                                         @if ($errors->has('city'))
                                             <span class="text-danger">{{ $errors->first('city') }}</span>
@@ -195,7 +195,8 @@
                                     <div class="form-group col-lg-6">
                                         <div class="form-group">
                                             <label for="quantity">{{ trans('cruds.post.fields.quantity') }}</label>
-                                            <input class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}"
+                                            <input
+                                                class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}"
                                                 type="number" name="quantity" id="quantity" step="1">
                                             @if ($errors->has('quantity'))
                                                 <span class="text-danger">{{ $errors->first('quantity') }}</span>
@@ -203,34 +204,34 @@
                                         </div>
                                     </div>
                                 </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="required"
-                                            for="barcode">{{ trans('cruds.post.fields.barcode') }}</label>
-                                        <input class="form-control {{ $errors->has('barcode') ? 'is-invalid' : '' }}"
-                                            type="text" name="barcode" id="barcode" value="E{{ sprintf("%06d", mt_rand(1, 9999999)) }}"
-                                            step="1" required>
-                                        @if ($errors->has('barcode'))
-                                            <span class="text-danger">{{ $errors->first('barcode') }}</span>
-                                        @endif
-                                        <span
-                                            class="help-block">{{ trans('cruds.post.fields.barcode_helper') }}</span>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="required"
+                                                for="barcode">{{ trans('cruds.post.fields.barcode') }}</label>
+                                            <input class="form-control {{ $errors->has('barcode') ? 'is-invalid' : '' }}"
+                                                type="text" name="barcode" id="barcode"
+                                                value="E{{ sprintf('%06d', mt_rand(1, 9999999)) }}" step="1" required>
+                                            @if ($errors->has('barcode'))
+                                                <span class="text-danger">{{ $errors->first('barcode') }}</span>
+                                            @endif
+                                            <span
+                                                class="help-block">{{ trans('cruds.post.fields.barcode_helper') }}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="status_id">{{ trans('cruds.post.fields.status') }}</label>
                                             <select
-                                                class="form-control select2 {{ $errors->has('status') ? 'is-invalid' : '' }}" readonly
-                                                name="status_id" id="status_id">
+                                                class="form-control select2 {{ $errors->has('status') ? 'is-invalid' : '' }}"
+                                                readonly name="status_id" id="status_id">
                                                 @foreach ($statuses as $id => $entry)
                                                     <option value="{{ $id }}"
-                                                    {{ 1 == $id ? 'selected' : '' }}>
-                                                    {{-- {{ old('status_id') == $id ? 'selected' : '' }}> --}}
-                                                    {{ $entry }}</option>
+                                                        {{ 1 == $id ? 'selected' : '' }}>
+                                                        {{-- {{ old('status_id') == $id ? 'selected' : '' }}> --}}
+                                                        {{ $entry }}</option>
                                                 @endforeach
                                             </select>
                                             @if ($errors->has('status'))
@@ -245,8 +246,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="notes">{{ trans('cruds.post.fields.notes') }}</label>
-                                            <textarea class="form-control {{ $errors->has('notes') ? 'is-invalid' : '' }}" name="notes"
-                                                id="notes">{{ old('notes') }}</textarea>
+                                            <textarea class="form-control {{ $errors->has('notes') ? 'is-invalid' : '' }}" name="notes" id="notes">{{ old('notes') }}</textarea>
                                             @if ($errors->has('notes'))
                                                 <span class="text-danger">{{ $errors->first('notes') }}</span>
                                             @endif
@@ -269,7 +269,7 @@
     </div>
 
     <script>
-        function new_price(){
+        function new_price() {
             var price = Number($('#customer_invoice_total').val()) - Number($('#delivery_price').val());
             $('#sender_total').val(price);
         }
@@ -277,46 +277,46 @@
         //     var total = Number($('#sender_total').val()) + Number($('#delivery_price').val());
         //     $('#customer_invoice_total').val(total);
         // }
-        function deliveryPrice(){
+        function deliveryPrice() {
             var id = $('#governorate_id').find(":selected").val();
             // var isChangable = $('#delivery_price').attr('isChangable');
-            if(id > 0){
+            if (id > 0) {
                 $.ajax({
-                method: 'GET',
-                url: "{{ route('admin.post.deliveryPrice') }}" + '/' + id,
-                success: function(data) {
-                    if(data){
-                        $('#delivery_price').val(data);
-                        new_price();
-                    }
+                    method: 'GET',
+                    url: "{{ route('admin.post.deliveryPrice') }}" + '/' + id,
+                    success: function(data) {
+                        if (data) {
+                            $('#delivery_price').val(data);
+                            new_price();
+                        }
 
-                }
+                    }
                 })
             }
         }
 
-        function changeCity(){
+        function changeCity() {
             var id = $('#governorate_id').find(":selected").val();
-            var city=$('#city_id');
-            if(id != ''){
-            $.ajax({
-            method: 'GET',
-            url: "{{ route('admin.post.changeCity') }}" + '/' + id,
-            success: function (data) {
-            city.empty();
-            city.append('<option value>الرجاء الإختيار</option>');
-            for (var i = 0; i < data.length; i++) {
-                city.append('<option value=' + data[i].id + '>' + data[i].name + '</option>');
-            };
-            }
-            })
-            }else{
+            var city = $('#city_id');
+            if (id != '') {
+                $.ajax({
+                    method: 'GET',
+                    url: "{{ route('admin.post.changeCity') }}" + '/' + id,
+                    success: function(data) {
+                        city.empty();
+                        city.append('<option value>الرجاء الإختيار</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            city.append('<option value=' + data[i].id + '>' + data[i].name + '</option>');
+                        };
+                    }
+                })
+            } else {
                 city.empty();
                 city.append('<option value>الرجاء الإختيار</option>');
             }
         }
 
-        $('#status_id'). select2('destroy'). attr("readonly", true)
+        $('#status_id').select2('destroy').attr("readonly", true)
     </script>
 @endsection
 ]
