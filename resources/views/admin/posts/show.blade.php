@@ -47,7 +47,7 @@
                         <th>
                             <p><h5 style="display: inline-block;">info@wasela-iq.com</h5></p>
                             <p><h5 style="display: inline-block;">07700096622</h5></p>
-                            <p style="display: inline-block"> <h5 style="display: inline-block;">{{ $post->id }}.No</h5></p> 
+                            <p style="display: inline-block"> <h5 style="display: inline-block;">{{ $post->barcode }}.No</h5></p> 
 
                         </th>
                     </tr>
@@ -92,7 +92,7 @@
                         </th>
                         <th style="text-align: right;">
                             <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.delivery_address') }} :</h5>
-                                {{ $post->address ?? '' }}</p>
+                                {{ $post->delivery_address ?? '' }}</p>
                         </th>
                     </tr>
                     <tr>
