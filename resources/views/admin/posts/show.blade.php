@@ -7,7 +7,7 @@
     @media print{
         @page {
             size: a5 portrait;
-            margin: 0;
+            margin: 50px;
         }
     }
 </style>
@@ -41,82 +41,82 @@
                     <tr style="border-bottom: 3px solid #000;">
                         <th>
                             <br><br>
-                            <p><h5 style="display: inline-block;">{{ trans('global.date') }} :</h5>
-                                {{ $post->created_at ? $post->created_at->toDateString() : date('Y-m-d') }}</p>
+                           <h3>{{ trans('global.date') }} :
+                                {{ $post->created_at ? $post->created_at->toDateString() : date('Y-m-d') }}</h3>
                         </th>
                         <th>
-                            <p><h5 style="display: inline-block;">info@wasela-iq.com</h5></p>
-                            <p><h5 style="display: inline-block;">07700096622</h5></p>
-                            <p style="display: inline-block"> <h5 style="display: inline-block;">{{ $post->barcode }}.No</h5></p> 
+                            <h3>info@wasela-iq.com</h3>
+                            <h3>07700096622</h3>
+                            <h3>{{ $post->barcode }}.No</h3> 
 
                         </th>
                     </tr>
                     <tr>
                         <th colspan="2">
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.sender') }} :</h5>
-                                {{ $post->sender->name ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.sender') }} :
+                                {{ $post->sender->name ?? '' }}</h3>
                         </th>
                     </tr>
                     <tr>
                         <th colspan="2">
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.sender_phone_number') }} :</h5>
-                                {{ $post->sender->phone ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.sender_phone_number') }} :
+                                {{ $post->sender->phone ?? '' }}</h3>
                         </th>
                     </tr>
                     <tr>
                         <th colspan="2">
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.receiver_name') }} :</h5>
-                                {{ $post->receiver_name ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.receiver_name') }} :
+                                {{ $post->receiver_name ?? '' }}</h3>
                         </th>
                     </tr>
                     <tr>
                         <th colspan="2">
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.receiver_phone_number') }} :</h5>
-                                {{ $post->receiver_phone_number ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.receiver_phone_number') }} :
+                                {{ $post->receiver_phone_number ?? '' }}</h3>
                         </th>
                     </tr>
                     <tr>
                         <th>
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.governorate') }} :</h5>
-                                {{ $post->governorate->name ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.governorate') }} :
+                                {{ $post->governorate->name ?? '' }}</h3>
                         </th>
                         <th style="text-align: right;">
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.city') }} :</h5>
-                                {{ $post->city->name ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.city') }} :
+                                {{ $post->city->name ?? '' }}</h3>
                         </th>
                     </tr>
                     <tr>
                         <th>
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.customer_invoice_total') }} :</h5>
-                                {{ $post->customer_invoice_total ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.customer_invoice_total') }} :
+                                {{ $post->customer_invoice_total ?? '' }}</h3>
                         </th>
                         <th style="text-align: right;">
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.delivery_address') }} :</h5>
-                                {{ $post->delivery_address ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.delivery_address') }} :
+                                {{ $post->delivery_address ?? '' }} </h3>
                         </th>
                     </tr>
                     <tr>
                         <th>
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.type') }} :</h5>
-                                {{ $post->type ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.type') }} :
+                                {{ $post->type ?? '' }}</h3>
                         </th>
                         <th style="text-align: right;">
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.quantity') }} :</h5>
-                                {{ $post->quantity ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.quantity') }} :
+                                {{ $post->quantity ?? '' }}</h3>
                         </th>
                     </tr>
                     <tr style="border-bottom: 3px solid #000;">
                         <th colspan="2">
-                            <p><h5 style="display: inline-block;">{{ trans('cruds.post.fields.notes') }} :</h5>
-                                {{ $post->notes ?? '' }}</p>
+                            <h3 style="display: inline-block;">{{ trans('cruds.post.fields.notes') }} :
+                                {{ $post->notes ?? '' }}</h3>
                         </th>
                     </tr>
                     <tr>
                         <th>
-                            <p><h5 style="display: inline-block;">نفق الشرطة, الشارع الخدمى , بجانب بسكولاتة.</h5></p>
+                            <h3 style="display: inline-block;">نفق الشرطة, الشارع الخدمى , بجانب بسكولاتة.</h3>
                         </th>
                         <th>
-                            <p><h5 style="display: inline-block;">www.wasela-iq.com</h5></p>
+                            <h3 style="display: inline-block;">www.wasela-iq.com</h3>
                         </th>
                     </tr>
                 </tbody>

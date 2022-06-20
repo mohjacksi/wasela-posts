@@ -5,8 +5,8 @@
 
     @media print{
         @page {
-            size: a5 portrait;
-            margin: 0;
+            size: a4 portrait;
+            margin: 50px;
         }
     }
 </style>
