@@ -16,10 +16,6 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
-use LaravelDaily\Invoices\Invoice as newInvoice;
-use LaravelDaily\Invoices\Classes\Party;
-use LaravelDaily\Invoices\Classes\InvoiceItem;
-
 class InvoiceController extends Controller
 {
     public function index(Request $request)
@@ -125,10 +121,8 @@ class InvoiceController extends Controller
         abort_if(Gate::denies('invoice_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $invoice->load('customer', 'invoicePosts');
-        $newInvoice=$this->createInvoice(0,$invoice->id,'arabicInvoice');
-        $newInvoice = $newInvoice->toHtml();
 
-        return view('admin.invoices.show', compact('invoice','newInvoice'));
+        return view('admin.invoices.show', compact('invoice'));
     }
 
     public function destroy(Invoice $invoice)
@@ -165,21 +159,6 @@ class InvoiceController extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function newCreate(Invoice $invoice)
-    {
-
-        abort_if(Gate::denies('invoice_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $invoice->load('customer', 'invoicePosts');
-
-        $newInvoice=$this->createInvoice($invoice->customer->id,$invoice->id);
-        $link = $newInvoice->url();
-
-        // And return invoice itself to browser or have a different view
-        return $newInvoice->download();
-
-    }
-
     public function getBalance(Request $request)
     {
         abort_if(Gate::denies('invoice_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -211,103 +190,6 @@ class InvoiceController extends Controller
         }
 
         return $data; 
-    }
-
-    public function createInvoice($client_id , $invoice_id=null , $template=null)
-    {
-
-        abort_if(Gate::denies('invoice_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        if($invoice_id){
-            $invoice=Invoice::with('customer', 'invoicePosts')->where('id',$invoice_id)->first();
-            $client = new Party([
-                'name'          => $invoice->customer->name,
-                'phone'         => $invoice->customer->phone,
-                'address'        => $invoice->customer->address,
-            ]);
-            if($invoice->invoicePosts->isEmpty()){     
-                $client = new Party([
-                    'name'          => 'No seller',
-                    'phone'         => 'No seller',
-                ]);
-                $newInvoice = newInvoice::make('invoice')->template('emptyInvoice')
-                ->seller($client);
-                return $newInvoice;
-            }
-            $posts=$invoice->invoicePosts;
-            $invoiceDate=$invoice->created_at;
-        }else{       
-            $clientData = CrmCustomer::with('senderPosts','customerInvoices')->where('id',$client_id)->first();
-            if(empty($clientData)){     
-                $client = new Party([
-                    'name'          => 'No seller',
-                    'phone'         => 'No seller',
-                ]);
-                $newInvoice = newInvoice::make('invoice')->template('emptyInvoice')
-                ->seller($client);
-                return $newInvoice;
-            }
-
-            $client = new Party([
-                'name'          => $clientData->name,
-                'phone'         => $clientData->phone,
-                'address'        => $clientData->address,
-            ]);
-            $posts= Post::with('status')->where([
-                ['sender_id','=',$client_id],
-                ['invoice_id', '=', null],
-                // ['status_id', '=', 3], // where status_id == 3 (delivered)
-            ])->get();
-            $invoiceDate=now();
-
-            if($posts->isEmpty()){     
-
-            $newInvoice = newInvoice::make('invoice')->template('emptyInvoice')
-            ->seller($client);
-            return $newInvoice; 
-            }
-        }
-        
-        $customer = new Party([
-            'custom_fields' => [
-                'Number of customers'        => count($posts),
-            ],
-        ]);
-
-        $items = [];
-        if(!$posts->isEmpty()){
-            foreach($posts as $key=>$post){
-                if($post->status_id != 3){
-                    $items[$key] = (new InvoiceItem())->title($post->barcode.' ( '.$post->receiver_name.' : '.$post->delivery_address.' ) ')
-                    ->pricePerUnit($post->sender_total)->discount($post->sender_total)->description($post->status->name);
-                }else{
-                    $items[$key] = (new InvoiceItem())->title($post->barcode.' ( '.$post->receiver_name.' : '.$post->delivery_address.' ) ')
-                    ->pricePerUnit($post->sender_total)->discount('0')->description($post->status->name);
-                }
-                
-            }
-        }
-
-        if($template == null){
-            $template='newInvoice';
-        }
-        $newInvoice = newInvoice::make('Invoice')->template($template)
-            ->series($client->name.now())
-            ->seller($client)
-            ->buyer($customer)
-            ->date($invoiceDate)
-            ->dateFormat('m/d/Y')
-            ->currencySymbol('$')
-            ->currencyCode('USD')
-            ->currencyFormat('{SYMBOL}{VALUE}')
-            ->currencyThousandsSeparator('.')
-            ->currencyDecimalPoint(',')
-            ->filename($client->name . ' ' . now())
-            ->addItems($items)
-            ->save('public');
-
-        return $newInvoice;
-
     }
 
 }

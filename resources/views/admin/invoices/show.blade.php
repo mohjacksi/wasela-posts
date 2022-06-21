@@ -23,10 +23,6 @@
                         {{ trans('global.back_to_list') }}
                     </a>
 
-                    {{-- <a class="btn btn-primary" href="#" onclick="toPDF()">
-                    {{ trans('cruds.invoice.download') }}
-                </a> --}}
-
                     <a class="btn btn-info" href="#" onclick="printInvoice()">
                         {{ trans('cruds.invoice.print') }}
                     </a>
@@ -70,16 +66,6 @@
     <script src="{{ asset('js/cdnjs/jspdf.min.js') }}"></script>
 
     <script>
-        function newInvoice() {
-            $.ajax({
-                    method: 'GET',
-                    url: "{{ route('admin.invoices.newCreate', $invoice->id) }}",
-                })
-                .done(function() {
-                    location.reload()
-                })
-
-        }
 
         function printInvoice() {
             // var myIframe = document.getElementById("print_content");
@@ -94,21 +80,21 @@
 
         }
 
-        function toPDF() {
-            var doc = new jsPDF();
-            var elementHTML = $('#print_content').html();
-            var specialElementHandlers = {
-                '#elementH': function (element, renderer) {
-                    return true;
-                }
-            };
-            doc.fromHTML(elementHTML, 15, 15, {
-                'width': 170,
-                'elementHandlers': specialElementHandlers
-            });
+        // function toPDF() {
+        //     var doc = new jsPDF();
+        //     var elementHTML = $('#print_content').html();
+        //     var specialElementHandlers = {
+        //         '#elementH': function (element, renderer) {
+        //             return true;
+        //         }
+        //     };
+        //     doc.fromHTML(elementHTML, 15, 15, {
+        //         'width': 170,
+        //         'elementHandlers': specialElementHandlers
+        //     });
 
-            // Save the PDF
-            doc.save('sample-document.pdf');
-        }
+        //     // Save the PDF
+        //     doc.save('sample-document.pdf');
+        // }
     </script>
 @endsection
