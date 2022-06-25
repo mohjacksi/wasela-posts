@@ -12,6 +12,7 @@ use App\Models\Governorate;
 use App\Models\Invoice;
 use App\Models\Post;
 use App\Models\PostStatus;
+use FontLib\Table\Type\post as TypePost;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -130,6 +131,10 @@ class PostController extends Controller
     {
         $post = Post::create($request->all());
 
+        if($post->barcode[0] == 'E'){
+            $post->update(['barcode'=>'E'.str_pad($post->id, 5, '0', STR_PAD_LEFT)]);
+            $post = Post::find($post->id);
+        }
         $post->load('sender', 'governorate', 'city', 'status', 'invoice');
 
         return view('admin.posts.show', compact('post'));

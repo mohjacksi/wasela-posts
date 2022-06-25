@@ -161,6 +161,7 @@
 @parent
 <script>
     function changeStatus(id,status_id){
+        event.preventDefault();
         let table = $('.datatable-Post').DataTable();
         var rowIndex = null;
             table.rows( function ( idx, data, node ) {
@@ -170,7 +171,6 @@
             return false;
         });
 
-        console.log(rowIndex);
         if(rowIndex || rowIndex === 0){
             $.ajax({
                 method: 'GET',
