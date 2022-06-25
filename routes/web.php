@@ -74,7 +74,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Post
     
     Route::get('post/changeCity/{id?}', 'PostController@changeCity')->name('post.changeCity');
-    Route::get('post/deliveryPrice/{id?}', 'PostController@deliveryPrice')->name('post.deliveryPrice');
+    Route::get('post/deliveryPrice/{gov_id?}/{sender_id?}', 'PostController@deliveryPrice')->name('post.deliveryPrice');
     Route::get('post/editStatus/{id?}/{status?}', 'PostController@editStatus')->name('post.editStatus');
     Route::delete('posts/destroy', 'PostController@massDestroy')->name('posts.massDestroy');
     Route::resource('posts', 'PostController');

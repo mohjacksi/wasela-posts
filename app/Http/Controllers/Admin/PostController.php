@@ -197,10 +197,31 @@ class PostController extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
     
-    public function deliveryPrice($id)
+    public function deliveryPrice($gov_id, $sender_id)
     {
-        $governorate=Governorate::find($id);
-        return $governorate->default_price;
+        if($sender_id > 0){
+            $customer = CrmCustomer::find($sender_id);
+            if(!$gov_id){
+                if($customer->capital_default_price){
+                    $price = $customer->capital_default_price;
+                }elseif($customer->other_default_price){
+                    $price = $customer->other_default_price;
+                }
+            }else{
+                if($customer->capital_default_price && $gov_id == 1){ //assume the capital id = 1
+                    $price = $customer->capital_default_price;
+                }elseif($customer->other_default_price && $gov_id > 1){
+                    $price = $customer->other_default_price;
+                }else{
+                    $governorate=Governorate::find($gov_id);
+                    $price = $governorate->default_price;
+                }
+            }
+        }elseif($gov_id > 0){
+            $governorate=Governorate::find($gov_id);
+            $price = $governorate->default_price;
+        }else{$price = 0;}
+        return $price;
     }
     
     public function changeCity($id)

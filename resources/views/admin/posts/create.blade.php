@@ -18,7 +18,8 @@
                                             for="sender_id">{{ trans('cruds.post.fields.sender') }}</label>
                                         <select
                                             class="form-control select2 {{ $errors->has('sender') ? 'is-invalid' : '' }}"
-                                            name="sender_id" id="sender_id" required>
+                                            name="sender_id" id="sender_id"
+                                            onchange="deliveryPrice()" required>
                                             @foreach ($senders as $id => $entry)
                                                 <option value="{{ $id }}"
                                                     {{ old('sender_id') == $id ? 'selected' : '' }}>
@@ -156,12 +157,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-12">
-                                        <label class="required"
-                                            for="delivery_address">{{ trans('cruds.post.fields.delivery_address') }}</label>
+                                        <label for="delivery_address">{{ trans('cruds.post.fields.delivery_address') }}</label>
                                         <input
                                             class="form-control {{ $errors->has('delivery_address') ? 'is-invalid' : '' }}"
                                             type="text" name="delivery_address" id="delivery_address"
-                                            value="{{ old('delivery_address', '') }}" required>
+                                            value="{{ old('delivery_address', '') }}">
                                         @if ($errors->has('delivery_address'))
                                             <span class="text-danger">{{ $errors->first('delivery_address') }}</span>
                                         @endif
@@ -204,6 +204,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                @php 
+                                    $statement = DB::select("SHOW TABLE STATUS LIKE 'posts'");
+                                    $nextId = $statement[0]->Auto_increment;
+                                    // $barcode = sprintf('%06d', mt_rand(1, 9999999));
+                                    $barcode = 'E'.str_pad($nextId, 5, '0', STR_PAD_LEFT);
+                                @endphp
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -211,7 +217,7 @@
                                                 for="barcode">{{ trans('cruds.post.fields.barcode') }}</label>
                                             <input class="form-control {{ $errors->has('barcode') ? 'is-invalid' : '' }}"
                                                 type="text" name="barcode" id="barcode"
-                                                value="E{{ sprintf('%06d', mt_rand(1, 9999999)) }}" step="1" required>
+                                                value="{{ $barcode }}" step="1" required>
                                             @if ($errors->has('barcode'))
                                                 <span class="text-danger">{{ $errors->first('barcode') }}</span>
                                             @endif
@@ -278,21 +284,22 @@
         //     $('#customer_invoice_total').val(total);
         // }
         function deliveryPrice() {
-            var id = $('#governorate_id').find(":selected").val();
+            var gov_id = $('#governorate_id').find(":selected").val();
+            var sender_id = $('#sender_id').find(":selected").val();
+            if(!gov_id){gov_id=0;}
+            if(!sender_id){sender_id=0;}
             // var isChangable = $('#delivery_price').attr('isChangable');
-            if (id > 0) {
-                $.ajax({
-                    method: 'GET',
-                    url: "{{ route('admin.post.deliveryPrice') }}" + '/' + id,
-                    success: function(data) {
-                        if (data) {
-                            $('#delivery_price').val(data);
-                            new_price();
-                        }
-
+            $.ajax({
+                method: 'GET',
+                url: "{{ route('admin.post.deliveryPrice') }}" + '/' + gov_id + '/' + sender_id,
+                success: function(data) {
+                    if (data) {
+                        $('#delivery_price').val(data);
+                        new_price();
                     }
-                })
-            }
+
+                }
+            })
         }
 
         function changeCity() {
@@ -316,7 +323,6 @@
             }
         }
 
-        $('#status_id').select2('destroy').attr("readonly", true)
+        // $('#status_id').select2('destroy').attr("readonly", true)
     </script>
 @endsection
-]

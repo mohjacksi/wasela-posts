@@ -33,10 +33,7 @@ class StorePostRequest extends FormRequest
             'receiver_phone_number' => [
                 'string',
                 'required',
-            ],
-            'delivery_address' => [
-                'string',
-                'required',
+                'digits_between:11,22',
             ],
             'sender_total' => [
                 'required',
