@@ -71,6 +71,22 @@
                             {{ $crmCustomer->description }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.crmCustomer.fields.capital_default_price') }}
+                        </th>
+                        <td>
+                            {{ $crmCustomer->capital_default_price }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.crmCustomer.fields.other_default_price') }}
+                        </th>
+                        <td>
+                            {{ $crmCustomer->other_default_price }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

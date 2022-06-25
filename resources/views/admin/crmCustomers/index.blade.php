@@ -47,6 +47,12 @@
                         {{ trans('cruds.crmCustomer.fields.balance') }}
                     </th>
                     <th>
+                        {{ trans('cruds.crmCustomer.fields.capital_default_price') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.crmCustomer.fields.other_default_price') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -109,6 +115,8 @@
 { data: 'phone', name: 'phone' },
 { data: 'address', name: 'address' },
 { data: 'balance', name: 'balance' },
+{ data: 'capital_default_price', name: 'capital_default_price' },
+{ data: 'other_default_price', name: 'other_default_price' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

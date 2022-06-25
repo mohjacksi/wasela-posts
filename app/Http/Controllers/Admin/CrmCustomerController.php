@@ -80,6 +80,14 @@ class CrmCustomerController extends Controller
                 return $row->address ? $row->address : '';
             });
 
+            $table->editColumn('capital_default_price', function ($row) {
+                return $row->capital_default_price ? $row->capital_default_price : '';
+            });
+
+            $table->editColumn('other_default_price', function ($row) {
+                return $row->other_default_price ? $row->other_default_price : '';
+            });
+
             $table->rawColumns(['actions', 'placeholder', 'status']);
 
             return $table->make(true);

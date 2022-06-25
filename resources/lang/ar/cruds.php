@@ -111,6 +111,8 @@ return [
             'name_helper'        => ' ',
             'balance'            => 'الرصيد',
             'name2'            => 'اسم العميل والصفحة',
+            'capital_default_price' => 'سعر التوصيل الافتراضى لبغداد',
+            'other_default_price'   => 'سعر التوصيل الافتراضى للمحافظات الأخرى'
         ],
     ],
     'crmNote' => [

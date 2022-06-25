@@ -62,6 +62,20 @@
                 <span class="help-block">{{ trans('cruds.crmCustomer.fields.description_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="capital_default_price">{{ trans('cruds.crmCustomer.fields.capital_default_price') }}</label>
+                <input class="form-control {{ $errors->has('capital_default_price') ? 'is-invalid' : '' }}" type="number" name="capital_default_price" id="capital_default_price" value="{{ old('capital_default_price', '') }}"  >
+                @if($errors->has('capital_default_price'))
+                    <span class="text-danger">{{ $errors->first('capital_default_price') }}</span>
+                @endif
+            </div>
+            <div class="form-group">
+                <label for="other_default_price">{{ trans('cruds.crmCustomer.fields.other_default_price') }}</label>
+                <input class="form-control {{ $errors->has('other_default_price') ? 'is-invalid' : '' }}" type="number" name="other_default_price" id="other_default_price" value="{{ old('other_default_price', '') }}"  >
+                @if($errors->has('other_default_price'))
+                    <span class="text-danger">{{ $errors->first('other_default_price') }}</span>
+                @endif
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

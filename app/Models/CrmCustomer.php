@@ -29,6 +29,8 @@ class CrmCustomer extends Model
         'phone',
         'address',
         'description',
+        'capital_default_price',
+        'other_default_price',
         'created_at',
         'updated_at',
         'deleted_at',
