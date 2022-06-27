@@ -86,13 +86,15 @@
                         </th>
                     </tr>
                     <tr>
-                        <th>
-                            <h2 style="display: inline-block;">{{ trans('cruds.post.fields.customer_invoice_total') }} :
-                                {{ $post->customer_invoice_total ?? '' }}</h2>
-                        </th>
-                        <th style="text-align: right;">
+                        <th colspan="2">
                             <h2 style="display: inline-block;">{{ trans('cruds.post.fields.delivery_address') }} :
                                 {{ $post->delivery_address ?? '' }} </h2>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <h2 style="display: inline-block;">{{ trans('cruds.post.fields.customer_invoice_total') }} :
+                                {{ $post->customer_invoice_total ?? '' }}</h2>
                         </th>
                     </tr>
                     <tr>
